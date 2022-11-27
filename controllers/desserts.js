@@ -2,7 +2,7 @@ const Dessert = require("../model/dessert");
 
 module.exports.showAllDesserts = async (req, res) => {
   const data = await Dessert.find({});
-  return res.render("desserts/index", { data, title: "sweetApp" });
+  return res.render("desserts/index", { data, title: "Desserts" });
 };
 module.exports.showNewDessertForm = (req, res) => {
   if (req.user) {
@@ -15,7 +15,7 @@ module.exports.showNewDessertForm = (req, res) => {
 module.exports.postNewDessert = async (req, res, next) => {
   const newDessert = new Dessert(req.body);
   await newDessert.save();
-  req.flash("success", "Successfully added a new dessert");
+  req.flash("success", "Successfully added a new dessert"); 
   res.redirect(`/desserts/${newDessert._id}`);
 };
 module.exports.showOneDessert = async (req, res, next) => {
