@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
+const mongoSanitize = require('express-mongo-sanitize');
 const engine = require("ejs-mate");
 const methodOverride = require("method-override");
 
@@ -16,19 +17,22 @@ const LocalStrategy = require("passport-local");
 main().catch((err) => {
   console.log(
     "#####################################MONGO CONNECTION ERROR!##############################################"
-  );
-  console.log(err);
-});
-
-async function main() {
-  await mongoose.connect("mongodb://localhost:27017/sweetApp");
-  console.log("----DB CONNECTED----");
-}
+    );
+    console.log(err);
+  });
+  
+  async function main() {
+    await mongoose.connect("mongodb://localhost:27017/sweetApp");
+    console.log("----DB CONNECTED----");
+  }
+  
 
 app.engine("ejs", engine);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use(mongoSanitize());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
