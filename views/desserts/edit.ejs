@@ -1,0 +1,147 @@
+<% layout('./layouts/boilerplate') -%>
+<div class="col-lg-6 offset-lg-3">
+  <h1>Edit:</h1>
+  <form
+    action="/desserts/<%=data.id%>/edit?_method=PUT"
+    method="post"
+    class="needs-validation"
+    novalidate
+  >
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="basic-addon1">Name: </span>
+      <input
+        type="text"
+        class="form-control"
+        name="name"
+        aria-label="name"
+        aria-describedby="basic-addon1"
+        value="<%=data.name%>"
+        required
+      />
+      <div class="invalid-feedback">Please provide a valid info.</div>
+    </div>
+
+    <div class="input-group mb-3">
+      <span class="input-group-text">Description: </span>
+      <textarea
+        class="form-control"
+        aria-label="description"
+        name="dsc"
+        required
+      >
+<%=data.dsc%>
+</textarea
+      >
+      <div class="invalid-feedback">Please provide a valid info.</div>
+    </div>
+
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="basic-addon2">Country: </span>
+      <input
+        type="text"
+        class="form-control"
+        name="country"
+        aria-label="country"
+        aria-describedby="basic-addon2"
+        value="<%=data.country%>"
+        required
+      />
+      <div class="invalid-feedback">Please provide a valid info.</div>
+    </div>
+
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="basic-addon3">Company: </span>
+      <input
+        type="text"
+        class="form-control"
+        name="company"
+        aria-label="company"
+        aria-describedby="basic-addon3"
+        value="<%=data.company%>"
+        required
+      />
+      <div class="invalid-feedback">Please provide a valid info.</div>
+    </div>
+
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="basic-addon4">img url: </span>
+      <input
+        type="text"
+        class="form-control"
+        name="img"
+        aria-label="img"
+        aria-describedby="basic-addon4"
+        value="<%=data.img%>"
+      />
+    </div>
+
+    <div class="input-group mb-3">
+      <span class="input-group-text">Price: </span>
+      <span class="input-group-text">$</span>
+      <input
+        type="number"
+        class="form-control"
+        min="0"
+        step="0.01"
+        name="price"
+        aria-label="Amount (to the nearest dollar)"
+        value="<%=data.price%>"
+        required
+      />
+      <div class="invalid-feedback">Please provide a valid info.</div>
+    </div>
+
+    <div class="input-group mb-3">
+      <span class="input-group-text">Rate: </span>
+      <input
+        type="number"
+        class="form-control"
+        min="0"
+        max="5"
+        placeholder="from 0 (worst) to 5(best)"
+        name="rate"
+        aria-label="Rate from 0 (worst) to 5(best)"
+        value="<%=data.rate%>"
+        required
+      />
+      <span class="input-group-text">/5</span>
+      <div class="invalid-feedback">Please provide a valid info.</div>
+    </div>
+
+    <button class="btn btn-info mb-3" type="submit">Update</button>
+  </form>
+
+  <form action="/desserts/<%=data.id%>/edit?_method=DELETE" method="post">
+    <button class="btn btn-danger mb-3" type="submit">Delete</button>
+  </form>
+
+  <button class="btn btn-primary">
+    <a href="/desserts">Go back to All</a>
+  </button>
+</div>
+
+<script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (() => {
+    "use strict";
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll(".needs-validation");
+
+    // Loop over them and prevent submission
+    Array.from(forms).forEach((form) => {
+      form.addEventListener(
+        "submit",
+        (event) => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+
+          form.classList.add("was-validated");
+        },
+        false
+      );
+    });
+  })();
+</script>

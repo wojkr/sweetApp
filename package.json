@@ -1,0 +1,33 @@
+{
+  "name": "sweetapp",
+  "version": "1.0.0",
+  "description": "Dessert rating site. Built with Nodejs, Express, MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "Desserts",
+    "Sweets",
+    "Food"
+  ],
+  "author": "wojkr",
+  "license": "ISC",
+  "dependencies": {
+    "connect-flash": "^0.1.1",
+    "ejs": "^3.1.8",
+    "ejs-mate": "^4.0.0",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "joi": "^17.6.3",
+    "method-override": "^3.0.0",
+    "mongoose": "^6.6.5",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^7.1.2"
+  }
+}

@@ -1,0 +1,19 @@
+<% layout('layouts/boilerplate') -%>
+  <h1>ALL DESSERTS <%=user%>
+  </h1>
+
+  <div class="row justify-content-evenly text-center">
+    <%for (let d of data){%>
+
+      <div class="card m-3 p-0" id="card-icon">
+        <a href="/desserts/<%=d._id%>">
+          <img src="<%=d.img%>" class="card-img-top" alt="..." />
+          <div class="card-body">
+            <h5 class="card-title">
+              <%=d.name%>
+            </h5>
+          </div>
+        </a>
+      </div>
+      <%}%>
+  </div>

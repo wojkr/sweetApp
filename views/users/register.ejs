@@ -1,0 +1,20 @@
+<% layout('./layouts/boilerplate') -%>
+    <div class="col-lg-6 offset-lg-3">
+        <h1>Sign up</h1>
+        <form action="/users/register" method="post" class="needs-validation" novalidate>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Username: </span>
+                <input type="text" class="form-control" name="username" aria-label="username"
+                    aria-describedby="basic-addon1" required />
+                <div class="invalid-feedback">Please provide a valid username.</div>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon2">Password </span>
+                <input type="text" class="form-control" aria-label="password" aria-describedby="basic-addon2"
+                    name="password" required />
+                <div class="invalid-feedback">Please provide a valid info.</div>
+            </div>
+            <button class="btn btn-info" type="submit">Submit</button>
+        </form>
+    </div>

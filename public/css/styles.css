@@ -1,0 +1,21 @@
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: inherit;
+}
+
+#card-icon {
+  max-width: 18rem;
+  border: none;
+  box-shadow: 0 0.5rem 1.5rem #ccb;
+  filter: brightness(0.97);
+}
+
+#card-icon:hover {
+  transform: scale(1.02);
+  filter: brightness(1.02);
+  transition: 0.3s;
+}

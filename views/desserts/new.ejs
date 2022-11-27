@@ -1,0 +1,55 @@
+<% layout('./layouts/boilerplate') -%>
+  <div class="col-lg-6 offset-lg-3">
+    <h1>Create a new dessert</h1>
+    <form action="/desserts" method="post" class="needs-validation" novalidate>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">Name: </span>
+        <input type="text" class="form-control" name="name" aria-label="name" aria-describedby="basic-addon1"
+          required />
+        <div class="invalid-feedback">Please provide a valid info.</div>
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text">Description: </span>
+        <textarea class="form-control" aria-label="description" name="dsc" required></textarea>
+        <div class="invalid-feedback">Please provide a valid info.</div>
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon2">Country: </span>
+        <input type="text" class="form-control" name="country" aria-label="country" aria-describedby="basic-addon2"
+          required />
+        <div class="invalid-feedback">Please provide a valid info.</div>
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon3">Company: </span>
+        <input type="text" class="form-control" name="company" aria-label="company" aria-describedby="basic-addon3"
+          required />
+        <div class="invalid-feedback">Please provide a valid info.</div>
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon4">img url: </span>
+        <input type="text" class="form-control" name="img" aria-label="img" aria-describedby="basic-addon4" />
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text">Price: </span>
+        <span class="input-group-text">$</span>
+        <input type="number" class="form-control" min="0" step="0.01" name="price"
+          aria-label="Amount (to the nearest dollar)" required />
+        <div class="invalid-feedback">Please provide a valid info.</div>
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text">Rate: </span>
+        <input type="number" class="form-control" min="0" max="5" placeholder="from 0 (worst) to 5(best)" name="rate"
+          aria-label="Rate from 0 (worst) to 5(best)" required />
+        <span class="input-group-text">/5</span>
+        <div class="invalid-feedback">Please provide a valid info.</div>
+      </div>
+
+      <button class="btn btn-info" type="submit">Create</button>
+    </form>
+  </div>
