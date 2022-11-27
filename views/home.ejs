@@ -1,6 +1,14 @@
 <% layout('./layouts/boilerplate') -%>
-
-    <h1>Hello<% if(user){%>,
-            <%= user.username %>
-                <%} %>
-    </h1>
+    <div class="d-flex flex-column flex-strech align-items-center justify-content-center h-100">
+        <a href="/desserts">
+            <h1 id="header-biggest" class="fw-light">Hello<% if(user){%>
+                    <%= user.username %>!
+                        <%} %>
+            </h1>
+            <h2 class="fs-5 ">
+                Welcome in our spacious and sweet place. Enjoy browsing best
+                of puddings that we could find, and if you fancy try it and leave your opinion!
+        </a>
+        </h2>
+        <button class="mt-3 btn btn-lg btn-outline-dark fw-light">Check it out!</button>
+    </div>

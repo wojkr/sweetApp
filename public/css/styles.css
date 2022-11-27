@@ -19,3 +19,21 @@ a:hover {
   filter: brightness(1.02);
   transition: 0.3s;
 }
+
+#header-biggest{
+  font-size: 10vh;
+}
+
+.background-Home{
+  background-image: linear-gradient(rgba(255,255,255,0.8),
+  rgba(255,255,255,0.7)),url("https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80");
+  background-position: center;
+  background-position-y: center;
+  background-size: 100vh auto;
+}
+
+@media  (orientation:landscape) {
+  .background-Home{
+    background-position-y: 30%;
+    background-size: auto 100vw;
+  }
