@@ -7,7 +7,8 @@
 
       <div class="card m-3 p-0" id="card-icon">
         <a href="/desserts/<%=d._id%>">
-          <img src="<%=d.img%>" class="card-img-top" alt="..." />
+          <img src="<%=d.imgs[0].url%>" class="card-img-top" alt="..."
+            onerror=src=`https://res.cloudinary.com/b789b130931413a/image/upload/v1669819470/sweetApp/NO_PICTURE_ftgbpt.jpg` />
           <div class="card-body">
             <h5 class="card-title text-muted">
               <%=d.name%>

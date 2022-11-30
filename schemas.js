@@ -5,7 +5,8 @@ module.exports.dessertSchema = Joi.object({
   dsc: Joi.string().required(),
   country: Joi.string().required(),
   company: Joi.string().required(),
-  img: Joi.string(),
+  // imgs: Joi.string(),
+  // author:Joi.string().required(),
   price: Joi.number().required().min(0),
   rate: Joi.number().required().min(0).max(5),
 }).required();

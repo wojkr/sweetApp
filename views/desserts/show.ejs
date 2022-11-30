@@ -2,7 +2,37 @@
     <div class="card mb-5">
         <div class="row g-0">
             <div class="col-md-6">
-                <img src="<%=data.img%>" class="img-fluid rounded-start" alt="...">
+                <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
+                    <div class="carousel-indicators">
+                        <% data.imgs.forEach((img,i)=>{ %>
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to=<%=i%>
+                                class=<%= i==0 ? 'active' : '' %> aria-label="Slide <%=i+1%>">
+                            </button>
+                            <%}) %>
+                    </div>
+                    <div class="carousel-inner">
+                        <% data.imgs.forEach((img,i)=>{ %>
+                            <div <%if(i==0){%>
+                                class= "carousel-item active"
+                                <%}else{%>
+                                    class= "carousel-item"
+                                    <%}%>>
+                                        <img src="<%=img.url%>" class="img-fluid rounded-start" alt="..."
+                                            onerror=src=`https://res.cloudinary.com/b789b130931413a/image/upload/v1669819470/sweetApp/NO_PICTURE_ftgbpt.jpg`>
+                            </div>
+                            <% }) %>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
             </div>
             <div class="col-md-6">
                 <div class="card-body">

@@ -8,9 +8,10 @@ const dessertSchema = new mongoose.Schema({
   dsc: {
     type: String,
   },
-  img: {
-    type: String,
-  },
+  imgs: [{
+    url:String,
+    filename: String
+  }],
   country: {
     type: String,
   },

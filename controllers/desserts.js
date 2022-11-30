@@ -1,3 +1,4 @@
+const e = require("connect-flash");
 const Dessert = require("../model/dessert");
 
 module.exports.showAllDesserts = async (req, res) => {
@@ -14,6 +15,8 @@ module.exports.showNewDessertForm = (req, res) => {
 };
 module.exports.postNewDessert = async (req, res, next) => {
   const newDessert = new Dessert(req.body);
+  newDessert.imgs=req.files.map(f=>({url: f.path,filename:f.filename}))
+  console.log(newDessert)
   await newDessert.save();
   req.flash("success", "Successfully added a new dessert"); 
   res.redirect(`/desserts/${newDessert._id}`);
@@ -38,7 +41,22 @@ module.exports.editOneDessertForm = async (req, res) => {
 };
 module.exports.putOneDessert = async (req, res, next) => {
   const { id } = req.params;
-  await Dessert.findByIdAndUpdate(id, req.body, { runValidators: true });
+//   console.log(req.body)
+//   const imgsToDelete=req.body.toDelete;
+//   if(imgsToDelete){
+//     const deleted=await Dessert.findOneAndUpdate({_id:id}, {$pull: { imgs: {filename: { $in: [ ...imgsToDelete ] } }}})
+//     console.log('-------------DELETED in PUT dessets route: ', id,deleted)
+//   }
+//   const imgs=[];
+//   if(typeof Array.isArray(req.body.imgs)){
+//     imgs.push(...req.files.map(f=>({url: f.path,filename:f.filename})))
+//     console.log('in TRUE')
+//   }else{
+//     imgs.push(req.files.map(f=>({url: f.path,filename:f.filename})))
+//     console.log('in FALSE')
+//   }
+//  req.body.imgs=imgs;
+//   await Dessert.findByIdAndUpdate(id, req.body, { runValidators: true });
   req.flash("success", "successfully edited a dessert");
   res.redirect(`/desserts/${id}`);
 };

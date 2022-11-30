@@ -1,3 +1,9 @@
+if(process.env.NODE_ENV!=="production"){
+  require('dotenv').config();
+}
+console.log('key ',process.env.CLOUDINARY_KEY)
+console.log('cloudname ',process.env.CLOUDINARY_CLOUD_NAME)
+console.log('secret ',process.env.CLOUDINARY_SECRET)
 const express = require("express");
 const app = express();
 const path = require("path");
@@ -63,6 +69,7 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use(passport.authenticate("session"));
 app.use((req, res, next) => {
+  res.locals.path=req.originalUrl;
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   res.locals.user = req.user || false;
@@ -84,6 +91,14 @@ app.get("/", (req, res) => {
 
 // const errorRoute = require("./routes/error");
 // app.use("*", errorRoute);
+
+// const seeds=require('./seeds/seeds')
+// const Dessert=require('./model/dessert')
+
+// app.get('/inputSeeds',async(req,res)=>{
+//   await Dessert.insertMany(seeds).then(console.log("git")).catch(e=>{throw new ExpressError(e)})
+//   res.send('GIT')
+// })
 
 //------------------------------------------------------------------------------------------------ERROR-HANDLING
 const handleValidationErr = (err) => {

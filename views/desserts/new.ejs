@@ -1,7 +1,7 @@
 <% layout('./layouts/boilerplate') -%>
   <div class="col-lg-6 offset-lg-3">
     <h1>Create a new dessert</h1>
-    <form action="/desserts" method="post" class="needs-validation" novalidate>
+    <form action="/desserts" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
       <div class="input-group mb-3">
         <span class="input-group-text" id="basic-addon1">Name: </span>
         <input type="text" class="form-control" name="name" aria-label="name" aria-describedby="basic-addon1"
@@ -29,9 +29,14 @@
         <div class="invalid-feedback">Please provide a valid info.</div>
       </div>
 
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="basic-addon4">img url: </span>
-        <input type="text" class="form-control" name="img" aria-label="img" aria-describedby="basic-addon4" />
+      <div class=" mb-3">
+        <!-- <div class="input-group mb-3"> -->
+        <!-- <span class="input-group-text" id="basic-addon4">img url: </span>
+        <input type="text" class="form-control" name="img" aria-label="img" aria-describedby="basic-addon4" /> -->
+        <label for="formFile" class="form-label" id="basic-addon4">Upload your img</label>
+        <input class="form-control" type="file" name="img" id="formFile" aria-label="img"
+          aria-describedby="basic-addon4" multiple>
+
       </div>
 
       <div class="input-group mb-3">
