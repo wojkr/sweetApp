@@ -1,5 +1,5 @@
-const e = require("connect-flash");
 const Dessert = require("../model/dessert");
+const {cloudinary}=require('../cloudinary/index')
 
 module.exports.showAllDesserts = async (req, res) => {
   const data = await Dessert.find({});
@@ -41,22 +41,16 @@ module.exports.editOneDessertForm = async (req, res) => {
 };
 module.exports.putOneDessert = async (req, res, next) => {
   const { id } = req.params;
-//   console.log(req.body)
-//   const imgsToDelete=req.body.toDelete;
-//   if(imgsToDelete){
-//     const deleted=await Dessert.findOneAndUpdate({_id:id}, {$pull: { imgs: {filename: { $in: [ ...imgsToDelete ] } }}})
-//     console.log('-------------DELETED in PUT dessets route: ', id,deleted)
-//   }
-//   const imgs=[];
-//   if(typeof Array.isArray(req.body.imgs)){
-//     imgs.push(...req.files.map(f=>({url: f.path,filename:f.filename})))
-//     console.log('in TRUE')
-//   }else{
-//     imgs.push(req.files.map(f=>({url: f.path,filename:f.filename})))
-//     console.log('in FALSE')
-//   }
-//  req.body.imgs=imgs;
-//   await Dessert.findByIdAndUpdate(id, req.body, { runValidators: true });
+  const dessert=await Dessert.findByIdAndUpdate(id, req.body, { runValidators: true });
+  const imgs=req.files.map(f=>({url: f.path,filename:f.filename}));
+  dessert.imgs.push(...imgs);
+  await dessert.save();
+  if(req.body.toDelete){
+    for (let filename of req.body.toDelete){
+      cloudinary.uploader.destroy(filename).then(result=>console.log(result));
+    }    
+    await dessert.updateOne({$pull: { imgs: {filename: { $in: req.body.toDelete  } }}})
+  }
   req.flash("success", "successfully edited a dessert");
   res.redirect(`/desserts/${id}`);
 };

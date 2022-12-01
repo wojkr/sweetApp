@@ -26,6 +26,7 @@ router.get("/:id", catchAsync(routes.showOneDessert));
 //-------------------------------------------------------------------------------------EDIT
 router.get("/:id/edit", catchAsync(routes.editOneDessertForm));
 
+// router.put("/:id/edit",upload.array('img'),  catchAsync(routes.putOneDessert));
 router.put("/:id/edit",upload.array('img'),  catchAsync(routes.putOneDessert));
 //-------------------------------------------------------------------------------------DELETE
 router.delete("/:id/edit", catchAsync(routes.deleteOneDessert));
