@@ -1,6 +1,16 @@
 const mongoose = require("mongoose");
 const Review = require('./review')
 
+const imageSchema= new mongoose.Schema({
+  
+    url:String,
+    filename: String
+  }
+);
+imageSchema.virtual('thumbnail').get(function(){
+  return this.url.replace('/upload','/upload/w_100');
+})
+
 const dessertSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -8,10 +18,7 @@ const dessertSchema = new mongoose.Schema({
   dsc: {
     type: String,
   },
-  imgs: [{
-    url:String,
-    filename: String
-  }],
+  imgs: [imageSchema],
   country: {
     type: String,
   },
