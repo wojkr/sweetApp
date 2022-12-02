@@ -35,9 +35,11 @@
                             <span class="visually-hidden">Next</span>
                         </button>
                         <%}else{%>
-                            <img src="<%=data.imgs[0].url%>" class="img-fluid rounded-start OUT" alt="..."
-                                onerror=src=`https://res.cloudinary.com/b789b130931413a/image/upload/v1669819470/sweetApp/NO_PICTURE_ftgbpt.jpg`>
-                            <%}%>
+                            <%if(data.imgs[0]){%>
+                                <img src="<%=data.imgs[0].url%>" class="img-fluid rounded-start OUT" alt="..."
+                                    onerror=src=`https://res.cloudinary.com/b789b130931413a/image/upload/v1669819470/sweetApp/NO_PICTURE_ftgbpt.jpg`>
+                                <%}%>
+                                    <%}%>
 
                     </div>
                     <div class="col-md-6">
@@ -114,6 +116,6 @@
         <script>
             console.log('be carefull, prettier adds space in EJS tag when files saved!!')
             const mapToken = '<%- process.env.MAP_TOKEN %>'
-            const dessert = <% - JSON.stringify(data) %>
+            const dessert = <%- JSON.stringify(data) %>
         </script>
         <script src="/js/showMap.js"></script>

@@ -8,4 +8,5 @@ const map = new mapboxgl.Map({
 
 const marker1 = new mapboxgl.Marker()
     .setLngLat(dessert.geometry.coordinates)
+    .setPopup(new mapboxgl.Popup().setHTML(`<h3>${dessert.company}</h3>`))
     .addTo(map);
