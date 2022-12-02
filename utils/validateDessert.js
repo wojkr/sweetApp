@@ -2,7 +2,6 @@ const ExpressError = require("../utils/ExpressError");
 const { dessertSchema } = require("../schemas");
 
 module.exports = validateDessert = (req, res, next) => {
-  console.log("multer parsing req.body after uploading imgs.... MUST BE FIXED. To make program works: 1.validation after uploading, 2. not verifying imgs ind JOIschemas")
   console.log("IN VALIDATE DESSERT UTILS", req.body);
   const { error } = dessertSchema.validate(req.body);
   if (error) {
@@ -14,4 +13,3 @@ module.exports = validateDessert = (req, res, next) => {
   }
   next();
 };
-//maybe dummy url and override after validation and uploading...??
