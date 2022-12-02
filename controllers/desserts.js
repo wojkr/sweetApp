@@ -1,5 +1,7 @@
 const Dessert = require("../model/dessert");
-const {cloudinary}=require('../cloudinary/index')
+const { cloudinary } = require('../cloudinary/index')
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+const geocoder = mbxGeocoding({ accessToken: process.env.MAP_TOKEN });
 
 module.exports.showAllDesserts = async (req, res) => {
   const data = await Dessert.find({});
@@ -15,10 +17,18 @@ module.exports.showNewDessertForm = (req, res) => {
 };
 module.exports.postNewDessert = async (req, res, next) => {
   const newDessert = new Dessert(req.body);
-  newDessert.imgs=req.files.map(f=>({url: f.path,filename:f.filename}))
+  const geoData = await geocoder.forwardGeocode({
+    query: newDessert.country,
+    limit: 1
+  })
+    .send()
+  console.log(geoData)
+  newDessert.geometry = geoData.body.features[0].geometry;
+  newDessert.author = req.user._id;
+  newDessert.imgs = req.files.map(f => ({ url: f.path, filename: f.filename }))
   console.log(newDessert)
   await newDessert.save();
-  req.flash("success", "Successfully added a new dessert"); 
+  req.flash("success", "Successfully added a new dessert");
   res.redirect(`/desserts/${newDessert._id}`);
 };
 module.exports.showOneDessert = async (req, res, next) => {
@@ -41,15 +51,15 @@ module.exports.editOneDessertForm = async (req, res) => {
 };
 module.exports.putOneDessert = async (req, res, next) => {
   const { id } = req.params;
-  const dessert=await Dessert.findByIdAndUpdate(id, req.body, { runValidators: true });
-  const imgs=req.files.map(f=>({url: f.path,filename:f.filename}));
+  const dessert = await Dessert.findByIdAndUpdate(id, req.body, { runValidators: true });
+  const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
   dessert.imgs.push(...imgs);
   await dessert.save();
-  if(req.body.toDelete){
-    for (let filename of req.body.toDelete){
-      cloudinary.uploader.destroy(filename).then(result=>console.log(result));
-    }    
-    await dessert.updateOne({$pull: { imgs: {filename: { $in: req.body.toDelete  } }}})
+  if (req.body.toDelete) {
+    for (let filename of req.body.toDelete) {
+      cloudinary.uploader.destroy(filename).then(result => console.log(result));
+    }
+    await dessert.updateOne({ $pull: { imgs: { filename: { $in: req.body.toDelete } } } })
   }
   req.flash("success", "successfully edited a dessert");
   res.redirect(`/desserts/${id}`);

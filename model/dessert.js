@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 const Review = require('./review')
 
-const imageSchema= new mongoose.Schema({
-  
-    url:String,
-    filename: String
-  }
+const imageSchema = new mongoose.Schema({
+
+  url: String,
+  filename: String
+}
 );
-imageSchema.virtual('thumbnail').get(function(){
-  return this.url.replace('/upload','/upload/w_100');
+imageSchema.virtual('thumbnail').get(function () {
+  return this.url.replace('/upload', '/upload/w_100');
 })
 
 const dessertSchema = new mongoose.Schema({
@@ -18,9 +18,24 @@ const dessertSchema = new mongoose.Schema({
   dsc: {
     type: String,
   },
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
   imgs: [imageSchema],
   country: {
     type: String,
+  },
+  geometry: {
+    type: {
+      type: String, // Don't do `{ location: { type: String } }`
+      enum: ['Point'], // 'location.type' must be 'Point'
+      required: true
+    },
+    coordinates: {
+      type: [Number],
+      required: true
+    }
   },
   company: {
     type: String,
