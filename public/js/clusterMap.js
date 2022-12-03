@@ -2,11 +2,11 @@ mapboxgl.accessToken = mapToken
 const map = new mapboxgl.Map({
     container: 'map',
     // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-    style: 'mapbox://styles/mapbox/dark-v11',
+    style: 'mapbox://styles/mapbox/light-v11',
     center: [-103.5917, 40.6699],
     zoom: 3
 });
-
+console.log('HEY', desserts, mapToken)
 map.on('load', () => {
     // Add a new source from our GeoJSON data and
     // set the 'cluster' option to true. GL-JS will
@@ -35,20 +35,20 @@ map.on('load', () => {
             'circle-color': [
                 'step',
                 ['get', 'point_count'],
-                '#51bbd6',
-                100,
-                '#f1f075',
-                750,
-                '#f28cb1'
+                '#00BCD4',
+                10,
+                '#2196F3',
+                20,
+                '#3F51B5'
             ],
             'circle-radius': [
                 'step',
                 ['get', 'point_count'],
                 20,
-                100,
-                30,
-                750,
-                40
+                10,
+                25,
+                20,
+                30
             ]
         }
     });
@@ -72,7 +72,7 @@ map.on('load', () => {
         filter: ['!', ['has', 'point_count']],
         paint: {
             'circle-color': '#11b4da',
-            'circle-radius': 4,
+            'circle-radius': 10,
             'circle-stroke-width': 1,
             'circle-stroke-color': '#fff'
         }
@@ -96,17 +96,12 @@ map.on('load', () => {
             }
         );
     });
-
     // When a click event occurs on a feature in
     // the unclustered-point layer, open a popup at
     // the location of the feature, with
     // description HTML from its properties.
     map.on('click', 'unclustered-point', (e) => {
         const coordinates = e.features[0].geometry.coordinates.slice();
-        const mag = e.features[0].properties.mag;
-        const tsunami =
-            e.features[0].properties.tsunami === 1 ? 'yes' : 'no';
-
         // Ensure that if the map is zoomed out such that
         // multiple copies of the feature are visible, the
         // popup appears over the copy being pointed to.
@@ -117,7 +112,7 @@ map.on('load', () => {
         new mapboxgl.Popup()
             .setLngLat(coordinates)
             .setHTML(
-                `magnitude: ${mag}<br>Was there a tsunami?: ${tsunami}`
+                e.features[0].properties.popUpMarkup
             )
             .addTo(map);
     });

@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const Review = require('./review')
+const options = { toJSON: { virtuals: true } }
 
 const imageSchema = new mongoose.Schema({
-
   url: String,
   filename: String
 }
@@ -51,7 +51,11 @@ const dessertSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Review'
   }]
-});
+}, options);
+
+dessertSchema.virtual('properties.popUpMarkup').get(function () {
+  return `${this.company} <br> <i>${this.name}</i>`
+})
 
 dessertSchema.post('findOneAndDelete', async (doc) => {
   if (doc) {

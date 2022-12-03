@@ -35,6 +35,7 @@ a:hover {
 .map-cluster{
   width: 100%;
   height: 500px;
+  max-height: 50vh;
 }
 
 @media  (orientation:landscape) {
