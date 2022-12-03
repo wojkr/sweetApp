@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate') -%>
+  <div id="map" class="map-cluster"></div>
   <h1 class="text-center">Browse our delicious desserts</h1>
-
   <p class="text-center text-muted">Have a closer look by clicking on the image, and feel the.. Sweet!</p>
   <div class="row justify-content-evenly text-center">
     <%for (let d of data){%>
@@ -24,3 +24,9 @@
       </div>
       <%}%>
   </div>
+  <script>
+    const mapToken = '<%- process.env.MAP_TOKEN %>'
+    const desserts = {features: <%- JSON.stringify(data) %>}
+  </script>
+  <script src="/js/clusterMap.js">
+  </script>
