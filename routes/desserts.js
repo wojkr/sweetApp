@@ -6,10 +6,10 @@ const catchAsync = require("../utils/catchAsync");
 const validateDessert = require("../utils/validateDessert");
 
 // Require the cloudinary library
-const {cloudinary,storage} = require('../cloudinary/index');
+const { cloudinary, storage } = require('../cloudinary/index');
 
 
-const multer  = require('multer')
+const multer = require('multer')
 const upload = multer({ storage })
 
 //-------------------------------------------------------------------------------SHOW-ALL
@@ -18,7 +18,7 @@ router.get("/", catchAsync(routes.showAllDesserts));
 //-------------------------------------------------------------------------------------NEW
 router.get("/new", routes.showNewDessertForm);
 
-router.post("/", upload.array('img'),validateDessert, catchAsync(routes.postNewDessert));
+router.post("/", upload.array('img'), validateDessert, catchAsync(routes.postNewDessert));
 
 //-------------------------------------------------------------------------------------SHOW-ONE
 router.get("/:id", catchAsync(routes.showOneDessert));
@@ -27,7 +27,7 @@ router.get("/:id", catchAsync(routes.showOneDessert));
 router.get("/:id/edit", catchAsync(routes.editOneDessertForm));
 
 // router.put("/:id/edit",upload.array('img'),  catchAsync(routes.putOneDessert));
-router.put("/:id/edit",upload.array('img'),  catchAsync(routes.putOneDessert));
+router.put("/:id/edit", upload.array('img'), validateDessert, catchAsync(routes.putOneDessert));
 //-------------------------------------------------------------------------------------DELETE
 router.delete("/:id/edit", catchAsync(routes.deleteOneDessert));
 

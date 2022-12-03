@@ -9,7 +9,7 @@ module.exports = validateDessert = (req, res, next) => {
     const message = error.details.map((d) => d.message).join(", ");
     console.log(message);
     req.flash("error", message);
-    // throw new ExpressError(message, 400);
+    throw new ExpressError(message, 400);
   }
   next();
 };
