@@ -46,6 +46,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
 const sessionConfig = {
+  name: 'sweetsession',
   secret: "GemLettuceIsHidden",
   resave: false,
   saveUninitialized: true,
