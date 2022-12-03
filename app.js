@@ -1,9 +1,9 @@
-if(process.env.NODE_ENV!=="production"){
+if (process.env.NODE_ENV !== "production") {
   require('dotenv').config();
 }
-console.log('key ',process.env.CLOUDINARY_KEY)
-console.log('cloudname ',process.env.CLOUDINARY_CLOUD_NAME)
-console.log('secret ',process.env.CLOUDINARY_SECRET)
+console.log('key ', process.env.CLOUDINARY_KEY)
+console.log('cloudname ', process.env.CLOUDINARY_CLOUD_NAME)
+console.log('secret ', process.env.CLOUDINARY_SECRET)
 const express = require("express");
 const app = express();
 const path = require("path");
@@ -23,15 +23,15 @@ const LocalStrategy = require("passport-local");
 main().catch((err) => {
   console.log(
     "#####################################MONGO CONNECTION ERROR!##############################################"
-    );
-    console.log(err);
-  });
-  
-  async function main() {
-    await mongoose.connect("mongodb://localhost:27017/sweetApp");
-    console.log("----DB CONNECTED----");
-  }
-  
+  );
+  console.log(err);
+});
+
+async function main() {
+  await mongoose.connect("mongodb://localhost:27017/sweetApp");
+  console.log("----DB CONNECTED----");
+}
+
 
 app.engine("ejs", engine);
 app.set("view engine", "ejs");
@@ -69,7 +69,7 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use(passport.authenticate("session"));
 app.use((req, res, next) => {
-  res.locals.path=req.originalUrl;
+  res.locals.path = req.originalUrl;
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   res.locals.user = req.user || false;
@@ -92,14 +92,12 @@ app.get("/", (req, res) => {
 // const errorRoute = require("./routes/error");
 // app.use("*", errorRoute);
 
-// const seeds=require('./seeds/seeds')
-// const Dessert=require('./model/dessert')
-
-// app.get('/inputSeeds',async(req,res)=>{
-//   await Dessert.insertMany(seeds).then(console.log("git")).catch(e=>{throw new ExpressError(e)})
-//   res.send('GIT')
-// })
-
+//------------------------------------------------------------------------------------------SEEDS IMPLEMENTATION 
+//to add seeds, uncomment code below and move it before routes for express to hit it, or just simply uncomment and hit the 404 route ;
+// const seeds = require(
+//   './seeds/inputSeedsMiddleware'
+// )
+// app.use(seeds)
 //------------------------------------------------------------------------------------------------ERROR-HANDLING
 const handleValidationErr = (err) => {
   console.log("IN THE HANDLER!");

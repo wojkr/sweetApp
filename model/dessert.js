@@ -22,6 +22,7 @@ const dessertSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
+  author_name: { type: String },
   imgs: [imageSchema],
   country: {
     type: String,
