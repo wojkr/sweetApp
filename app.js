@@ -11,6 +11,7 @@ const mongoose = require("mongoose");
 const mongoSanitize = require('express-mongo-sanitize');
 const engine = require("ejs-mate");
 const methodOverride = require("method-override");
+const helmet = require('helmet')
 
 const session = require("express-session");
 const flash = require("connect-flash");
@@ -39,6 +40,12 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(mongoSanitize());
+app.use(
+  helmet({
+    crossOriginEmbedderPolicy: false,
+    contentSecurityPolicy: false
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -74,6 +81,7 @@ app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   res.locals.user = req.user || false;
+  res.locals.defaultPic = 'https://res.cloudinary.com/b789b130931413a/image/upload/v1670111925/sweetApp/NO_PICTURE_gf5aio.jpg';
   next();
 });
 
