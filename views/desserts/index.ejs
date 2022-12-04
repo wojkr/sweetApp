@@ -1,8 +1,10 @@
 <% layout('layouts/boilerplate-w100') -%>
   <div id="map" class="map-cluster"></div>
   <script>
-    const mapToken = '<%- process.env.MAP_TOKEN %>'
-    const desserts = { features: <%- JSON.stringify(data) %>}
+    const mapToken = '<%- process.env.MAP_TOKEN %>';
+    const desserts = { features: <%- JSON.stringify(data) %>};
+    const defaultImg= '<%=defaultPic%>';
+    const imgClassName='card-img-top';
   </script>
   <script src="/js/clusterMap.js">
   </script>
@@ -15,9 +17,10 @@
         <div class="card m-3 p-0" id="card-icon">
           <a href="/desserts/<%=d._id%>">
             <%if(d.imgs&&d.imgs.length){%>
-              <img src="<%=d.imgs[0].url%>" class="card-img-top" alt="..." onerror=src='<%=defaultPic%>' />
+              <img src="<%=d.imgs[0].url%>" class="card-img-top" alt="..."
+               />
               <%}else{%>
-                <img src='<%=defaultPic%>''
+                <img src='<%=defaultPic%>'
                 class="card-img-top" alt="..." %>
                 <%}%>
                   <div class="card-body">
@@ -28,5 +31,6 @@
           </a>
         </div>
         <%}%>
+          <script src="/js/imgOnError.js"></script>
     </div>
   </div>

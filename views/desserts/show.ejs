@@ -2,6 +2,7 @@
     <div class="card mb-5">
         <div class="row g-0">
             <div class="col-md-6">
+                
                 <%if(data.imgs&&data.imgs.length>1){%>
                     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
                         <div class="carousel-indicators">
@@ -20,8 +21,7 @@
                                         class= "carousel-item"
                                         <%}%>>
                                             <img src="<%=img.url%>" class="img-fluid rounded-start IN" alt="..."
-                                                onerror=src=`https://res.cloudinary.com/b789b130931413a/image/upload/v1669819470/sweetApp/NO_PICTURE_ftgbpt.jpg`>
-                                </div>
+                                  </div>
                                 <% }) %>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
@@ -37,8 +37,7 @@
                         <%}else{%>
                             <%if(data.imgs[0]){%>
                                 <img src="<%=data.imgs[0].url%>" class="img-fluid rounded-start OUT" alt="..."
-                                    onerror=src=`https://res.cloudinary.com/b789b130931413a/image/upload/v1669819470/sweetApp/NO_PICTURE_ftgbpt.jpg`>
-                                <%}%>
+                                        <%}%>
                                     <%}%>
 
                     </div>
@@ -115,7 +114,10 @@
         </section>
         <script>
             console.log('be carefull, prettier adds space in EJS tag when files saved!!')
-            const mapToken = '<%- process.env.MAP_TOKEN %>'
-            const dessert = <%- JSON.stringify(data) %>
+            const mapToken = '<%- process.env.MAP_TOKEN %>';
+            const dessert = <%- JSON.stringify(data) %>;
+            const defaultImg= '<%=defaultPic%>';
+            const imgClassName='img-fluid';
         </script>
         <script src="/js/showMap.js"></script>
+        <script src="/js/imgOnError.js"></script>
