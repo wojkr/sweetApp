@@ -2,7 +2,6 @@
     <div class="card mb-5">
         <div class="row g-0">
             <div class="col-md-6">
-                
                 <%if(data.imgs&&data.imgs.length>1){%>
                     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
                         <div class="carousel-indicators">
@@ -20,51 +19,56 @@
                                     <%}else{%>
                                         class= "carousel-item"
                                         <%}%>>
-                                            <img src="<%=img.url%>" class="img-fluid rounded-start IN" alt="..."
-                                  </div>
-                                <% }) %>
+                                            <img src="<%=img.url%>" class="img-fluid rounded-start IN" alt="..." </div>
+                                            <% }) %>
+                                </div>
+                                <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button"
+                                    data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                            data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                            data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
                         <%}else{%>
                             <%if(data.imgs[0]){%>
-                                <img src="<%=data.imgs[0].url%>" class="img-fluid rounded-start OUT" alt="..."
-                                        <%}%>
-                                    <%}%>
-
+                                <img src="<%=data.imgs[0].url%>" class="img-fluid rounded-start OUT" alt="..." <%}%>
+                                <%}%>
                     </div>
-                    <div class="col-md-6">
-                        <div class="card-body">
-                            <h1 class="card-title">
-                                <%=data.name%>
-                            </h1>
-                            <h4 class="card-title"> by: <%=data.company%>
-                            </h4>
-                            <p class="card-text"><small class="text-muted"> Country: <%=data.country%></small></p>
-                            <p class="card-text">Description: <%=data.dsc%>
-                                    <p class="card-text text-muted"> Price $<%=data.price%>
-                                    </p>
-                                    <p class="card-text"><small class="text-muted"> Rated: <%=data.rate%>/5</small></p>
-                            </p>
-                            <div class="btn btn-info"><a href="/desserts/<%=data.id%>/edit">edit</a> </div>
-                            <div class="btn btn-primary"><a href="/desserts">go to all</a> </div>
+                    <div class="card-body">
+                        <h1 class="card-title">
+                            <%=data.name%>
+                        </h1>
+                        <h4 class="card-title"> by: <%=data.company%>
+                        </h4>
+                        <p class="card-text"><small class="text-muted"> Country: <%=data.country%>
+                            </small></p>
+                        <p class="card-text">Description: <%=data.dsc%>
+                                <p class="card-text text-muted"> Price $<%=data.price%>
+                                </p>
+                                <p class="card-text"><small class="text-muted"> Rated:
+                                        <%=data.rate%>/5
+                                    </small>
+                                </p>
+                        </p>
+                        <div class="btn btn-info"><a href="/desserts/<%=data.id%>/edit">edit</a>
                         </div>
+                        <div class="btn btn-primary"><a href="/desserts">go to all</a> </div>
                     </div>
             </div>
+            <div class="col-md-6">
+                <div id="map" class="map-fluid"></div>
+            </div>
+
         </div>
+    </div>
 
-        <div id='map' style='width: 400px; height: 300px;'></div>
-
+    <% if(user){%>
         <form action="/desserts/<%=data.id%>/review" method="post" class="needs-validation mb-5" novalidate>
-            <h1>Add a new review</h1>
+            <h2>Add a new review</h2>
             <div class="input-group mb-3">
                 <span class="input-group-text">Rating: </span>
                 <input type="number" class="form-control" min="0" max="5" placeholder="from 0 (worst) to 5(best)"
@@ -79,45 +83,49 @@
             </div>
             <button class="btn btn-primary" type="submit">Add a review</button>
         </form>
-
-        <section>
-            <h1>Reviews</h1>
-            <%if(!data.reviews.length){%>
-                <p>no reviews yet</p>
-                <%}%>
-                    <%for(let review of data.reviews){%>
-                        <div class="card mb-3">
-                            <div class="row g-0">
-                                <div class="col-sm-auto">
-                                    <div class="card-body border-end">
-                                        <h5 class="card-title">Card title
-                                        </h5>
-                                        <h6 class="card-subtitle mb-2 text-muted">Rating: <%=review.rating%>/5</h6>
+        <% }else{%>
+            <h2>To add a review - <a href="/users/login?returnTo=/desserts/<%=data.id%>">log in here</a></h2>
+            <% }%>
+                <section>
+                    <h1>Reviews</h1>
+                    <%if(!data.reviews.length){%>
+                        <p>no reviews yet</p>
+                        <%}%>
+                            <%for(let review of data.reviews){%>
+                                <div class="card mb-3">
+                                    <div class="row g-0">
+                                        <div class="col-sm-auto">
+                                            <div class="card-body border-end">
+                                                <h5 class="card-title">Card title
+                                                </h5>
+                                                <h6 class="card-subtitle mb-2 text-muted">Rating:
+                                                    <%=review.rating%>/5
+                                                </h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm p-3">
+                                            <p class="card-text">
+                                                <%=review.text%>
+                                            </p>
+                                        </div>
+                                        <!-- <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a> -->
+                                        <div class="col-sm-auto">
+                                            <form action="/desserts/<%=data.id%>/review/<%=review.id%>?_method=DELETE"
+                                                method="post">
+                                                <button class=" btn btn-danger">delete</button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-sm p-3">
-                                    <p class="card-text">
-                                        <%=review.text%>
-                                    </p>
-                                </div>
-                                <!-- <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a> -->
-                                <div class="col-sm-auto">
-                                    <form action="/desserts/<%=data.id%>/review/<%=review.id%>?_method=DELETE"
-                                        method="post">
-                                        <button class=" btn btn-danger">delete</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <%}%>
-        </section>
-        <script>
-            console.log('be carefull, prettier adds space in EJS tag when files saved!!')
-            const mapToken = '<%- process.env.MAP_TOKEN %>';
-            const dessert = <%- JSON.stringify(data) %>;
-            const defaultImg= '<%=defaultPic%>';
-            const imgClassName='img-fluid';
-        </script>
-        <script src="/js/showMap.js"></script>
-        <script src="/js/imgOnError.js"></script>
+                                <%}%>
+                </section>
+                <script>
+                    console.log('be carefull, prettier adds space in EJS tag when files saved!!')
+                    const mapToken = '<%- process.env.MAP_TOKEN %>';
+                    const dessert = <% - JSON.stringify(data) %>;
+                    const defaultImg = '<%=defaultPic%>';
+                    const imgClassName = 'img-fluid';
+                </script>
+                <script src="/js/showMap.js"></script>
+                <script src="/js/imgOnError.js"></script>
