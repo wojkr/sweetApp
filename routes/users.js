@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 const routes = require("../controllers/users");
 const catchAsync = require("../utils/catchAsync");
+const validateUser = require("../utils/validateUser");
 
 router
   .route("/login")
@@ -11,7 +12,7 @@ router
 router
   .route("/register")
   .get(routes.showRegisterForm)
-  .post(catchAsync(routes.postRegister));
+  .post(validateUser, catchAsync(routes.postRegister));
 
 router.route("/logout").get(routes.logout);
 

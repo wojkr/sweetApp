@@ -5,6 +5,7 @@ console.log('key ', process.env.CLOUDINARY_KEY)
 console.log('cloudname ', process.env.CLOUDINARY_CLOUD_NAME)
 console.log('secret ', process.env.CLOUDINARY_SECRET)
 const express = require("express");
+
 const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
@@ -14,6 +15,8 @@ const methodOverride = require("method-override");
 const helmet = require('helmet')
 
 const session = require("express-session");
+const cookieParser = require("cookie-parser"); //being forced to use cookie for redirecting user. Afrer calling passport.authenticate(): req.session's custom variables are destroyed... bug
+app.use(cookieParser());
 const flash = require("connect-flash");
 
 const ExpressError = require("./utils/ExpressError");
@@ -101,7 +104,7 @@ const sessionConfig = {
     httpOnly: true,
     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
     maxAge: 1000 * 60 * 60 * 24 * 7,
-  },
+  }
 };
 app.use(session(sessionConfig));
 app.use(flash());
@@ -117,6 +120,7 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use(passport.authenticate("session"));
 app.use((req, res, next) => {
+  if (!(req.originalUrl == '/users/login' || req.originalUrl == '/users/register')) res.clearCookie('returnTo')
   res.locals.path = req.originalUrl;
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
@@ -138,8 +142,8 @@ app.get("/", (req, res) => {
   res.render("./home", { title: "Home" });
 });
 
-// const errorRoute = require("./routes/error");
-// app.use("*", errorRoute);
+const errorRoute = require("./routes/error");
+app.use("*", errorRoute);
 
 //------------------------------------------------------------------------------------------SEEDS IMPLEMENTATION 
 //to add seeds, uncomment code below and move it before routes for express to hit it, or just simply uncomment and hit the 404 route ;

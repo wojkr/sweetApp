@@ -1,6 +1,11 @@
 const Dessert = require("../model/dessert");
 const Review = require("../model/review");
 
+module.exports.showTheDessert = (req, res) => {
+  const { id } = req.params;
+  res.redirect(`/desserts/${id}`)
+}
+
 module.exports.postNewReview = async (req, res) => {
   const { id } = req.params;
   const review = new Review(req.body);

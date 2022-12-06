@@ -33,6 +33,11 @@ module.exports.postNewDessert = async (req, res, next) => {
 };
 module.exports.showOneDessert = async (req, res, next) => {
   const { id } = req.params;
+  if (!req.user) res.cookie('returnTo', req.originalUrl)
+  if (id.length != 24) {
+    req.flash("error", "Page not found");
+    return res.redirect("/desserts");
+  }
   const data = await Dessert.findById(id).populate("reviews");
   if (!data) {
     req.flash("error", "Dessert not found");

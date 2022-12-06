@@ -4,7 +4,7 @@ const routes = require("../controllers/desserts");
 
 const catchAsync = require("../utils/catchAsync");
 const validateDessert = require("../utils/validateDessert");
-
+const isLoggedIn = require("../utils/isLoggedIn")
 // Require the cloudinary library
 const { cloudinary, storage } = require('../cloudinary/index');
 
@@ -16,7 +16,7 @@ const upload = multer({ storage })
 router.get("/", catchAsync(routes.showAllDesserts));
 
 //-------------------------------------------------------------------------------------NEW
-router.get("/new", routes.showNewDessertForm);
+router.get("/new", isLoggedIn, routes.showNewDessertForm);
 
 router.post("/", upload.array('img'), validateDessert, catchAsync(routes.postNewDessert));
 
