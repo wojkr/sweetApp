@@ -38,3 +38,8 @@ module.exports.reviewSchema = Joi.object({
   text: Joi.string().required().escapeHTML(),
   rating: Joi.number().min(0).max(5).required()
 })
+
+module.exports.userSchema = Joi.object({
+  username: Joi.string().min(5).max(20).required().escapeHTML(),
+  Password: Joi.string().min(7).max(30).required().escapeHTML()
+})
