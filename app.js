@@ -21,6 +21,10 @@ const ExpressError = require("./utils/ExpressError");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 
+const MongoStore = require('connect-mongo');
+
+// const dbUrl = process.env.DB_URL;
+const dbUrl = "mongodb://localhost:27017/sweetApp";
 main().catch((err) => {
   console.log(
     "#####################################MONGO CONNECTION ERROR!##############################################"
@@ -29,7 +33,7 @@ main().catch((err) => {
 });
 
 async function main() {
-  await mongoose.connect("mongodb://localhost:27017/sweetApp");
+  await mongoose.connect(dbUrl);
   console.log("----DB CONNECTED----");
 }
 
@@ -98,9 +102,20 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(methodOverride("_method"));
 
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  secret: 'TheGemLettuceIsHidden',
+  touchAfter: 24 * 3600 // time period in seconds
+})
+
+store.on("error", function (e) {
+  console.log("-------SESSION STORE ERROR-------", e)
+})
+
 const sessionConfig = {
+  store,
   name: 'sweetsession',
-  secret: "GemLettuceIsHidden",
+  secret: "TheGemLettuceIsHidden",
   resave: false,
   saveUninitialized: true,
   cookie: {
