@@ -22,11 +22,9 @@ module.exports.postNewDessert = async (req, res, next) => {
     limit: 1
   })
     .send()
-  console.log(geoData)
   newDessert.geometry = geoData.body.features[0].geometry;
   newDessert.author = req.user._id;
   newDessert.imgs = req.files.map(f => ({ url: f.path, filename: f.filename }))
-  console.log(newDessert)
   await newDessert.save();
   req.flash("success", "Successfully added a new dessert");
   res.redirect(`/desserts/${newDessert._id}`);
@@ -50,7 +48,7 @@ module.exports.editOneDessertForm = async (req, res) => {
   const data = await Dessert.findById(id);
   if (!data) {
     req.flash("error", "Dessert not found");
-    res.redirect("/desserts");
+    return res.redirect("/desserts");
   }
   res.render("desserts/edit", { data, title: `edit: ${data.name}` });
 };

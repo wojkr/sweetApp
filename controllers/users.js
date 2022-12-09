@@ -14,7 +14,9 @@ module.exports.showRegisterForm = (req, res, next) => {
 module.exports.postRegister = async (req, res, next) => {
   try {
     const { username, password } = req.body;
+    console.log('in user controller')
     const newUser = await User.register(new User({ username }), password);
+    console.log('in user controller', newUser)
     req.login(newUser, () => {
       (err) => {
         if (err) return next(err);
@@ -39,7 +41,6 @@ module.exports.postRegister = async (req, res, next) => {
 //----------------------------------------------------------LOGIN
 module.exports.showLoginForm = (req, res, next) => {
   const { returnTo } = req.query;
-  console.log('from contr users ', returnTo)
   if (returnTo && returnTo.length > 1) {
     res.cookie('returnTo', returnTo)
   }

@@ -97,6 +97,9 @@
                                         <div class="col-sm-auto">
                                             <div class="card-body border-end">
                                                 <h5 class="card-title">Card title
+                                                    <%if(review.author){%>
+                                                        <%=review.author%>
+                                                            <%}%>
                                                 </h5>
                                                 <h6 class="card-subtitle mb-2 text-muted">Rating:
                                                     <%=review.rating%>/5
@@ -111,10 +114,15 @@
                                         <!-- <a href="#" class="card-link">Card link</a>
                         <a href="#" class="card-link">Another link</a> -->
                                         <div class="col-sm-auto">
-                                            <form action="/desserts/<%=data.id%>/review/<%=review.id%>?_method=DELETE"
-                                                method="post">
-                                                <button class=" btn btn-danger">delete</button>
-                                            </form>
+                                            <i>
+                                            </i>
+                                            <% if(review.author&&review.author.equals(user._id)){ %>
+                                                <form
+                                                    action="/desserts/<%=data.id%>/review/<%=review.id%>?_method=DELETE"
+                                                    method="post">
+                                                    <button class=" btn btn-danger">delete</button>
+                                                </form>
+                                                <% } %>
                                         </div>
                                     </div>
                                 </div>

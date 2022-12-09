@@ -12,6 +12,10 @@ const reviewSchema = new Schema({
         min: 0,
         max: 5,
         required: true
+    },
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     }
 })
 

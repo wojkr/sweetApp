@@ -9,6 +9,8 @@ module.exports.showTheDessert = (req, res) => {
 module.exports.postNewReview = async (req, res) => {
   const { id } = req.params;
   const review = new Review(req.body);
+  review.author = req.user;
+  console.log(review)
   const dessert = await Dessert.findById(id);
   dessert.reviews.push(review);
   await review.save();
