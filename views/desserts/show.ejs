@@ -19,7 +19,7 @@
                                     <%}else{%>
                                         class= "carousel-item"
                                         <%}%>>
-                                            <img src="<%=img.url%>" class="img-fluid rounded-start IN" alt="..." </div>
+                                            <img src="<%=img.url%>" class="img-fluid rounded-start IN" alt="..."> </div>
                                             <% }) %>
                                 </div>
                                 <button class="carousel-control-prev" type="button"
@@ -34,36 +34,49 @@
                                 </button>
                         </div>
                         <%}else{%>
-                            <%if(data.imgs[0]){%>
-                                <img src="<%=data.imgs[0].url%>" class="img-fluid rounded-start OUT" alt="..." <%}%>
-                                <%}%>
+                            <img 
+                            <%if(data.imgs.length){%>
+                                src="<%=data.imgs[0].url%>" 
+                                <%}else{%>
+                                    src=""
+                                    <%}%>
+                                class="img-fluid rounded-start OUT" 
+                                alt="..."> 
+                        <%}%>
                     </div>
                     <div class="card-body">
-                        <h1 class="card-title">
-                            <%=data.name%>
-                        </h1>
-                        <h4 class="card-title"> by: <%=data.company%>
-                        </h4>
-                        <p class="card-text"><small class="text-muted"> Country: <%=data.country%>
-                            </small></p>
-                        <p class="card-text">Description: <%=data.dsc%>
-                                <p class="card-text text-muted"> Price $<%=data.price%>
+                        <% if(data.author){ %>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    Posted by: <%=data.author.username%>
+                                </small>
+                            </p>
+                            <% } %>
+                                <h1 class="card-title">
+                                    <%=data.name%>
+                                </h1>
+                                <h4 class="card-title"> by: <%=data.company%>
+                                </h4>
+                                <p class="card-text"><small class="text-muted"> Country: <%=data.country%>
+                                    </small></p>
+                                <p class="card-text">Description: <%=data.dsc%>
+                                        <p class="card-text text-muted"> Price $<%=data.price%>
+                                        </p>
+                                        <p class="card-text"><small class="text-muted"> Rated:
+                                                <%=data.rate%>/5
+                                            </small>
+                                        </p>
                                 </p>
-                                <p class="card-text"><small class="text-muted"> Rated:
-                                        <%=data.rate%>/5
-                                    </small>
-                                </p>
-                        </p>
-                        <div class="btn btn-info"><a href="/desserts/<%=data.id%>/edit">edit</a>
-                        </div>
-                        <div class="btn btn-primary"><a href="/desserts">go to all</a> </div>
+                                <div class="btn btn-info"><a href="/desserts/<%=data.id%>/edit">edit</a>
+                                </div>
+                                <div class="btn btn-primary"><a href="/desserts">go to all</a> </div>
                     </div>
             </div>
             <div class="col-md-6">
                 <div id="map" class="map-fluid"></div>
             </div>
-
-        </div>
+<!-- 
+        </div> -->
     </div>
 
     <% if(user){%>
@@ -114,8 +127,6 @@
                                         <!-- <a href="#" class="card-link">Card link</a>
                         <a href="#" class="card-link">Another link</a> -->
                                         <div class="col-sm-auto">
-                                            <i>
-                                            </i>
                                             <% if(review.author&&review.author.equals(user._id)){ %>
                                                 <form
                                                     action="/desserts/<%=data.id%>/review/<%=review.id%>?_method=DELETE"
