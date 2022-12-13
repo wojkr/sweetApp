@@ -1,9 +1,9 @@
 if (process.env.NODE_ENV !== "production") {
   require('dotenv').config();
 }
-console.log('key ', process.env.CLOUDINARY_KEY)
-console.log('cloudname ', process.env.CLOUDINARY_CLOUD_NAME)
-console.log('cloudinary secret ', process.env.CLOUDINARY_SECRET)
+// console.log('key ', process.env.CLOUDINARY_KEY)
+// console.log('cloudname ', process.env.CLOUDINARY_CLOUD_NAME)
+// console.log('cloudinary secret ', process.env.CLOUDINARY_SECRET)
 const express = require("express");
 
 const app = express();
