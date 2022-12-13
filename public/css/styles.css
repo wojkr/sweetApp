@@ -35,6 +35,11 @@ a:hover {
 #header-biggest{
   font-size: 10vh;
 }
+
+hr{
+  margin: 0.5rem 0;
+}
+
 .map-fluid{
   width: 100%;
   height: 300px;
