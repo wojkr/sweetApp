@@ -3,7 +3,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 console.log('key ', process.env.CLOUDINARY_KEY)
 console.log('cloudname ', process.env.CLOUDINARY_CLOUD_NAME)
-console.log('secret ', process.env.CLOUDINARY_SECRET)
+console.log('cloudinary secret ', process.env.CLOUDINARY_SECRET)
 const express = require("express");
 
 const app = express();
@@ -26,8 +26,10 @@ const LocalStrategy = require("passport-local");
 
 const MongoStore = require('connect-mongo');
 
-// const dbUrl = process.env.DB_URL;
-const dbUrl = "mongodb://localhost:27017/sweetApp";
+const post = process.env.PORT || 3000;
+const secret = process.env.SECRET || "TheGemLettuceIsHidden";
+const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/sweetApp";
+// const dbUrl = "mongodb://localhost:27017/sweetApp";
 main().catch((err) => {
   console.log(
     "#####################################MONGO CONNECTION ERROR!##############################################"
@@ -86,7 +88,7 @@ app.use(methodOverride("_method"));
 
 const store = MongoStore.create({
   mongoUrl: dbUrl,
-  secret: 'TheGemLettuceIsHidden',
+  secret,
   touchAfter: 24 * 3600 // time period in seconds
 })
 
@@ -97,7 +99,7 @@ store.on("error", function (e) {
 const sessionConfig = {
   store,
   name: 'sweetsession',
-  secret: "TheGemLettuceIsHidden",
+  secret,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -167,6 +169,7 @@ app.use((err, req, res, next) => {
     .render("./error", { title: "ERROR", statusCode, message, err });
 });
 
-app.listen(3000, () => {
-  console.log("LISTEN ON PORT 3000");
+
+app.listen(port, () => {
+  console.log(`Serving on port ${port}`);
 });
