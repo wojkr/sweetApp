@@ -123,6 +123,7 @@ passport.deserializeUser(User.deserializeUser());
 app.use(passport.authenticate("session"));
 app.use((req, res, next) => {
   if (!(req.originalUrl == '/users/login' || req.originalUrl == '/users/register')) res.clearCookie('returnTo')
+  console.log('IN THE APP.JS, req.orgUrl: ', req.originalUrl)
   res.locals.path = req.originalUrl;
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
