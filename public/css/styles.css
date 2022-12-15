@@ -52,9 +52,26 @@ hr{
   box-shadow: 0 0 1rem #0001;
 }
 
+nav,footer{
+  background-color: hsl(0, 0%, 95%);
+}
+
+
+#nav-logo{
+  height: 4rem;
+}
+
 @media  (orientation:landscape) {
   .background-Home{
     background-position-y: 30%;
     background-size: auto 100vw;
   }
+}
+
+
+@media (min-width: 767.99px){
+  .nav-link{
+    padding: 1.5rem 0;
+    }
+
 }
