@@ -36,7 +36,16 @@ module.exports.showOneDessert = async (req, res, next) => {
     req.flash("error", "Page not found");
     return res.redirect("/desserts");
   }
-  const data = await Dessert.findById(id).populate("reviews").populate("author");
+  const data = await Dessert.findById(id)
+    .populate("author")
+    .populate("reviews")
+    .populate({
+      path: "reviews",
+      populate: {
+        path: "author",
+        model: "User"
+      }
+    });
   if (!data) {
     req.flash("error", "Dessert not found");
     return res.redirect("/desserts");
