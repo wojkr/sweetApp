@@ -1,11 +1,9 @@
 if (process.env.NODE_ENV !== "production") {
   require('dotenv').config();
 }
-console.log('key ', process.env.CLOUDINARY_KEY)
-console.log('cloudname ', process.env.CLOUDINARY_CLOUD_NAME)
-console.log('secret ', process.env.CLOUDINARY_SECRET)
 const express = require("express");
 
+const adminsId = process.env.ADMIN_ID
 const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
@@ -26,7 +24,9 @@ const LocalStrategy = require("passport-local");
 
 const MongoStore = require('connect-mongo');
 
-// const dbUrl = process.env.DB_URL;
+const port = process.env.PORT || 3000;
+const secret = process.env.SECRET || "TheGemLettuceIsHidden";
+// const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/sweetApp";
 const dbUrl = "mongodb://localhost:27017/sweetApp";
 main().catch((err) => {
   console.log(
@@ -86,7 +86,7 @@ app.use(methodOverride("_method"));
 
 const store = MongoStore.create({
   mongoUrl: dbUrl,
-  secret: 'TheGemLettuceIsHidden',
+  secret,
   touchAfter: 24 * 3600 // time period in seconds
 })
 
@@ -97,7 +97,7 @@ store.on("error", function (e) {
 const sessionConfig = {
   store,
   name: 'sweetsession',
-  secret: "TheGemLettuceIsHidden",
+  secret,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -126,6 +126,7 @@ app.use((req, res, next) => {
   res.locals.error = req.flash("error");
   res.locals.user = req.user || false;
   res.locals.defaultPic = 'https://res.cloudinary.com/b789b130931413a/image/upload/v1670111925/sweetApp/NO_PICTURE_gf5aio.jpg';
+  res.locals.adminsId = adminsId;
   next();
 });
 
@@ -167,6 +168,6 @@ app.use((err, req, res, next) => {
     .render("./error", { title: "ERROR", statusCode, message, err });
 });
 
-app.listen(3000, () => {
-  console.log("LISTEN ON PORT 3000");
+app.listen(port, () => {
+  console.log(`Serving on port ${port}`);
 });
