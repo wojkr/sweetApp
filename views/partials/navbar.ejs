@@ -9,7 +9,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
+      <ul class="navbar-nav  flex-grow-1 ">
         <li class="nav-item">
           <a class="nav-link" aria-current="page" href="/">Home</a>
         </li>
@@ -32,6 +32,18 @@
             </li>
             <% } %>
       </ul>
+      <% if(user){ %>
+        <ul class="navbar-nav  ">
+          <div class="navbar-user nav-item">
+            <a class="nav-link" href="/users/user">
+              <img id="nav-pic-user"
+                src="https://res.cloudinary.com/b789b130931413a/image/upload/c_scale,h_50/v1671204814/sweetApp/LogoMakr-4fj5b9_qlmg11.png"
+                alt="">
+              <%=user.username %>
+            </a>
+          </div>
+        </ul>
+        <% } %>
     </div>
   </div>
 </nav>

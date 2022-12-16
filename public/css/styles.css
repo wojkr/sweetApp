@@ -56,9 +56,14 @@ nav,footer{
   background-color: hsl(0, 0%, 95%);
 }
 
-
 #nav-logo{
-  height: 4rem;
+  height: 70px;
+}
+#nav-pic-user{
+  display: none;
+}
+.navbar-brand{
+  padding: 0;
 }
 
 @media  (orientation:landscape) {
@@ -70,8 +75,14 @@ nav,footer{
 
 
 @media (min-width: 767.99px){
-  .nav-link{
+ .nav-item > .nav-link{
     padding: 1.5rem 0;
+    }
+ .navbar-user > .nav-link{
+    padding: 0;
+    }
+    #nav-pic-user{
+      display: inline
     }
 
 }
