@@ -1,0 +1,17 @@
+<% layout('./layouts/boilerplate') -%>
+    <h1>users:
+    </h1>
+    <ul>
+        <% for(let d of data) {%>
+            <li>
+                <h3>
+                    <a href="/users/<%=d.id%>">
+                        <%=d.username%>
+                    </a>
+                </h3>
+                <p><a href="/users/<%=d.id%>/reviews">0 reviews,</a> <a href="/users/<%=d.id%>/desserts">0 desserts.</a>
+                </p>
+            </li>
+            <hr>
+            <% } %>
+    </ul>

@@ -16,4 +16,8 @@ router
 
 router.route("/logout").get(routes.logout);
 
+// router.route("/user").get(routes.redirectUser);
+router.route("/").get(routes.showAllUsers);
+router.route("/:id").get(routes.showUser);
+
 module.exports = router;

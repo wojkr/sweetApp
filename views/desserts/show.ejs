@@ -55,7 +55,7 @@
                             <% if(data.author){ %>
                             <p class="card-text mb-0">
                                 <small>
-                                    <span class="text-muted">Posted by:</span> <%=data.author.username%>
+                                    <span class="text-muted">Posted by:</span> <a href="/users/<%=data.author._id%> "><%=data.author.username%></a>
                                 </small>
                             </p>
                             <% } %>

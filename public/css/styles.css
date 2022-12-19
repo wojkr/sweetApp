@@ -40,6 +40,9 @@ hr{
   margin: 0.5rem 0;
 }
 
+li{
+  list-style: none;
+}
 .map-fluid{
   width: 100%;
   height: 300px;
@@ -72,7 +75,6 @@ nav,footer{
     background-size: auto 100vw;
   }
 }
-
 
 @media (min-width: 767.99px){
  .nav-item > .nav-link{
