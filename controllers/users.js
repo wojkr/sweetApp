@@ -27,7 +27,7 @@ module.exports.postRegister = async (req, res, next) => {
       );
       if (req.cookies.returnTo) {
         const returnToUrl = req.cookies.returnTo;
-        res.clearCookie(returnTo);
+        res.clearCookie("returnTo");
         return res.redirect(returnToUrl);
       }
       return res.redirect("/desserts");

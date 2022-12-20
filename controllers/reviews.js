@@ -1,5 +1,6 @@
 const Dessert = require("../model/dessert");
 const Review = require("../model/review");
+const User = require("../model/user")
 
 module.exports.showTheDessert = (req, res) => {
   const { id } = req.params;
@@ -9,12 +10,19 @@ module.exports.showTheDessert = (req, res) => {
 module.exports.postNewReview = async (req, res) => {
   const { id } = req.params;
   const review = new Review(req.body);
-  review.author = req.user;
-  console.log(review)
   const dessert = await Dessert.findById(id);
+  const user = await User.findById(req.user._id)
+
+  review.author = req.user;
+  review.dessert = dessert;
+
+  user.reviews.push(review)
   dessert.reviews.push(review);
+
   await review.save();
   await dessert.save();
+  await user.save();
+
   req.flash("success", "Successfully added a new review");
   res.redirect(`/desserts/${id}`);
 };
