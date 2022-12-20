@@ -1,4 +1,6 @@
 const passport = require("passport");
+const Dessert = require("../model/dessert");
+const Review = require("../model/review")
 const User = require("../model/user");
 //----------------------------------------------------------REGISTER
 // };
@@ -94,15 +96,68 @@ module.exports.showUser = async (req, res, next) => {
 module.exports.showAllUsers = async (req, res, next) => {
   const data = await User.find({})
   res.render('users/showAllUsers', { title: "All Users", data })
-  // if (!req.params.id) {
-  //   res.cookie('returnTo', req.originalUrl)
-  //   return res.redirect("users/login")
-  // }
-  // const { id } = req.params;
-  // if (!req.user._id.equals(id)) {
-  //   const data = await User.findById(id)
-  //   console.log(data)
-  //   return res.render("users/showUser", { title: `${data.username}`, data })
-  // }
-  // res.render("users/showUser", { title: `${req.user.username}`, data: req.user })
+}
+
+
+//-----------------------------------------------------------DELETE USER
+module.exports.deleteUser = async (req, res) => {
+  let reviewsToDelete = [];
+  let dessertsToDelete = [];
+  if (req.user.reviews.length) {
+    reviewsToDelete = req.user.reviews.map(r => r._id)
+  }
+  if (req.user.desserts.length) {
+    dessertsToDelete = req.user.desserts.map(d => d._id)
+  }
+
+  //other users reviews in our user desserts
+  const returnedReviews = await returnAllReviews(dessertsToDelete, req.user._id)
+  if (returnedReviews && returnedReviews.length) reviewsToDelete.push(...returnedReviews)
+
+  console.log('in delete controllers/user')
+  console.log(`All content created by user ${req.user.username} to be deleted. DESSERTS: ${dessertsToDelete.length}, REVIEWS: ${reviewsToDelete.length}`)
+
+  // delete user.reviews + user.desserts 
+  await User.updateMany({
+    $or: [
+      { reviews: { $in: reviewsToDelete } },
+      { desserts: { $in: dessertsToDelete } }
+    ]
+  },
+    {
+      $or: [
+        { $pull: { reviews: { $in: reviewsToDelete } } },
+        { $pull: { desserts: { $in: dessertsToDelete } } }
+      ]
+    })
+
+  //delete reviews
+  await Review.deleteMany({ _id: { $in: reviewsToDelete } })
+  //delete dessert
+  await Dessert.deleteMany({ _id: { $in: dessertsToDelete } })
+
+  const userId = req.user._id;
+  if (req.user) {
+    req.logout(function (err) {
+      if (err) {
+        return next(err);
+      }
+    });
+  }
+  await User.findByIdAndDelete(userId)
+  req.flash('success', 'Succesfully removed account with all content. Bye!')
+  res.redirect("/users/")
+}
+
+const returnAllReviews = async function (dessertsToDelete, userId) {
+  const desserts = await Dessert.find({ _id: { $in: dessertsToDelete } }).populate('reviews')
+  if (desserts.length) {
+    const reviewsToDelete = desserts.map(
+      dessert => dessert.reviews.map(
+        d => {
+          if (!d.author.equals(userId))
+            return d._id
+        })).flat(1)
+    return reviewsToDelete.filter(r => r !== undefined)
+  }
 }

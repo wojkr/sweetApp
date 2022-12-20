@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const Review = require('./review')
+const User = require('./user')
+
 const options = { toJSON: { virtuals: true } }
 
 const imageSchema = new mongoose.Schema({
@@ -59,6 +61,15 @@ dessertSchema.virtual('properties.popUpMarkup').get(function () {
 
 dessertSchema.post('findOneAndDelete', async (doc) => {
   if (doc) {
+    const reviews = await Review.find({ _id: { $in: doc.reviews } })
+    let reviewsUsers = [];
+    let reviewsIds = [];
+    if (reviews.length) {
+      reviewsUsers = reviews.map(r => r.author)
+      reviewsIds = reviews.map(r => r._id)
+    }
+    await User.updateMany({ _id: { $in: reviewsUsers } }, { $pull: { reviews: { $in: reviewsIds } } })
+    await User.findByIdAndUpdate(doc.author, { $pull: { desserts: doc._id } })
     await Review.deleteMany({ _id: { $in: doc.reviews } })
   }
 })

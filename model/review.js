@@ -26,10 +26,7 @@ const reviewSchema = new Schema({
 
 reviewSchema.post("findOneAndDelete", async (doc) => {
     if (doc) {
-        console.log('in review model: ', doc)
         await User.findByIdAndUpdate(doc.author, { $pull: { reviews: doc._id } })
-        const test = await User.findById(doc.author)
-        console.log(test)
     }
 })
 

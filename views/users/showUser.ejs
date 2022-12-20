@@ -1,7 +1,17 @@
 <% layout('./layouts/boilerplate') -%>
-
-    <h1><span class="text-muted">User: </span> <%=data.username%>
-    </h1>
+<div class="row">
+    <div class="col">
+        <h1><span class="text-muted">User: </span> <%=data.username%>
+        </h1>
+    </div>
+    <% if(data._id.equals(user._id)||adminsId.includes(user._id)){ %>
+    <div class="col-auto">
+        <form action="/users/<%=user.id%>?_method=DELETE" method="POST">
+        <button class="btn btn-danger" type="submit">DELETE</button>
+        </form>
+    </div>
+    <% } %> 
+</div>
     <hr>
 
     <h2><span class="text-muted">Added reviews:</span>

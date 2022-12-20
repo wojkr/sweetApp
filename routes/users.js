@@ -3,6 +3,8 @@ const router = express.Router({ mergeParams: true });
 const routes = require("../controllers/users");
 const catchAsync = require("../utils/catchAsync");
 const validateUser = require("../utils/validateUser");
+const isLoggedIn = require('../utils/isLoggedIn')
+const isAuth = require("../utils/isAuth").user;
 
 router
   .route("/login")
@@ -16,8 +18,9 @@ router
 
 router.route("/logout").get(routes.logout);
 
-// router.route("/user").get(routes.redirectUser);
 router.route("/").get(routes.showAllUsers);
-router.route("/:id").get(routes.showUser);
+router.route("/:id")
+  .get(routes.showUser)
+  .delete(isAuth, routes.deleteUser);
 
 module.exports = router;
