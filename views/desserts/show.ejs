@@ -19,7 +19,7 @@
                             <%}else{%>
                                     class= "carousel-item"
                                     <%}%>>
-                                        <img src="<%=img.url%>" class="img-fluid rounded-start IN" alt="..."> 
+                                        <img src="<%=img.url%>" class="img-fluid rounded-start" alt="desserts pictures"> 
                                 </div>
                             <% }) %>
                         </div>
@@ -39,10 +39,10 @@
                             <%if(data.imgs.length){%>
                                 src="<%=data.imgs[0].url%>" 
                                 <%}else{%>
-                                    src=""
+                                    src="<%=defaultPic%>"
                                     <%}%>
-                                class="img-fluid rounded-start OUT" 
-                                alt="..."> 
+                                class="img-fluid rounded-start" 
+                                alt="picture of the dessert"> 
                         <%}%>
                     <div class="card-body">
                         <% if(data.author_name){ %>
@@ -123,7 +123,7 @@
                         <p>no reviews yet</p>
                         <%}%>
                             <%for(let review of data.reviews){%>
-                                <div class="card mb-3">
+                                <div id=<%=review._id%> class="card mb-3">
                                     <div class="row g-0">
                                         <div class="col-sm-auto">
                                             <div class="card-body border-end">
@@ -131,7 +131,7 @@
                                                         <p class="card-text mb-0">
                                                             <small class="text-small text-muted">User: </small>
                                                         </p>
-                                                        <p class="card-title mb-0"><%=review.author.username%></p>
+                                                        <p class="card-title mb-0"><a href="/users/<%=review.author._id%>"><%=review.author.username%></a></p>
                                                         <%}else{%>
                                                             <span class="text-muted">No author</span> 
                                                             <%}%>
@@ -164,7 +164,7 @@
                                 </div>
                                 <%}%>
                 </section>
-                <script>
+                <script defer>
                     console.log('be carefull, prettier adds space in EJS tag when files saved!!')
                     const mapToken = '<%- process.env.MAP_TOKEN %>';
                     const dessert = <%- JSON.stringify(data) %>;
