@@ -19,7 +19,7 @@
                             <%}else{%>
                                     class= "carousel-item"
                                     <%}%>>
-                                        <img src="<%=img.url%>" class="img-fluid rounded-start IN" alt="..."> 
+                                        <img src="<%=img.url%>" class="img-fluid rounded-start" alt="desserts pictures"> 
                                 </div>
                             <% }) %>
                         </div>
@@ -39,16 +39,23 @@
                             <%if(data.imgs.length){%>
                                 src="<%=data.imgs[0].url%>" 
                                 <%}else{%>
-                                    src=""
+                                    src="<%=defaultPic%>"
                                     <%}%>
-                                class="img-fluid rounded-start OUT" 
-                                alt="..."> 
+                                class="img-fluid rounded-start" 
+                                alt="picture of the dessert"> 
                         <%}%>
                     <div class="card-body">
-                        <% if(data.author){ %>
+                        <% if(data.author_name){ %>
                             <p class="card-text mb-0">
-                                <small class="text-muted">
-                                    Posted by: <%=data.author.username%>
+                                <small><span class="text-muted">
+                                    Example from:</span> <a href="https://github.com/igdev116/free-food-menus-api">igdev116</a>
+                                </small>
+                            </p>
+                            <% } %> 
+                            <% if(data.author){ %>
+                            <p class="card-text mb-0">
+                                <small>
+                                    <span class="text-muted">Posted by:</span> <a href="/users/<%=data.author._id%> "><%=data.author.username%></a>
                                 </small>
                             </p>
                             <% } %>
@@ -56,31 +63,34 @@
                                     <%=data.name%>
                                 </h1>
                                 <hr>
-                                <p class="card-text">Description: <br><%=data.dsc%>   
+                                <p class="card-text"><span class="text-muted">Description:</span><br><%=data.dsc%>   
                                 </p>
                                 <hr>
-                                <p class="card-text text-muted"> Price $<%=data.price%>
+                                <p class="card-text"><span class="text-muted">Price $</span><%=data.price%>
                                 </p>
                     </div>
             </div>
             <div class="col-md-6">
                 <div id="map" class="map-fluid"></div>
                 <div class="card-body">
-
                     <h4 class="card-title text-muted"> More info: 
                     </h4>
-                    <hr>
-                <p class="card-text mb-1"> by: <%=data.company%>
+                <p class="card-text mb-1"><span class="text-muted">by: </span><%=data.company%>
                 </p>
-                <p class="card-text mb-1"><small class="text-muted"> Country: <%=data.country%>
-                </small></p>
-                <p class="card-text mb-1"><small class="text-muted"> Rated:
+                <p class="card-text mb-1"><span class="text-muted">Country:</span> <%=data.country%>
+                </p>
+                <p class="card-text mb-3"><span class="text-muted">Rated:</span>
                     <%=data.rate%>/5
-                </small>
             </p>
-            <div class="btn btn-info"><a href="/desserts/<%=data.id%>/edit">edit</a>
-            </div>
-            <div class="btn btn-primary"><a href="/desserts">go to all</a> </div>
+            <% if(data.author._id.equals(user._id)||adminsId.includes(user._id)) {%> 
+                <div class="d-grid gap-2 col-6 mx-auto">
+            <a href="/desserts/<%=data.id%>/edit" class="btn btn-info">edit</a>
+        </div>
+            <%}%>
+            <hr>
+            <div class="d-grid gap-2 col-6 mx-auto">
+           <a href="/desserts" class="btn btn-primary">go to all</a> 
+        </div>
         </div>
             </div>
 
@@ -113,41 +123,48 @@
                         <p>no reviews yet</p>
                         <%}%>
                             <%for(let review of data.reviews){%>
-                                <div class="card mb-3">
+                                <div id=<%=review._id%> class="card mb-3">
                                     <div class="row g-0">
                                         <div class="col-sm-auto">
                                             <div class="card-body border-end">
-                                                <h5 class="card-title">Card title
                                                     <%if(review.author){%>
-                                                        <%=review.author%>
+                                                        <p class="card-text mb-0">
+                                                            <small class="text-small text-muted">User: </small>
+                                                        </p>
+                                                        <p class="card-title mb-0"><a href="/users/<%=review.author._id%>"><%=review.author.username%></a></p>
+                                                        <%}else{%>
+                                                            <span class="text-muted">No author</span> 
                                                             <%}%>
-                                                </h5>
+                                                            <hr>
                                                 <h6 class="card-subtitle mb-2 text-muted">Rating:
                                                     <%=review.rating%>/5
                                                 </h6>
                                             </div>
                                         </div>
-                                        <div class="col-sm p-3">
+                                        <div class="col-sm p-3 pb-0">
                                             <p class="card-text">
                                                 <%=review.text%>
                                             </p>
-                                        </div>
-                                        <!-- <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a> -->
-                                        <div class="col-sm-auto">
-                                            <% if(review.author&&review.author.equals(user._id)){ %>
+                                            <% if(review.author&&review.author.equals(user._id)||adminsId.includes(user._id)){ %>
+                                                <hr>
+                                                <div class="d-grid gap-2 col-6 mx-auto">
+          
                                                 <form
                                                     action="/desserts/<%=data.id%>/review/<%=review.id%>?_method=DELETE"
                                                     method="post">
-                                                    <button class=" btn btn-danger">delete</button>
+                                                    <button class=" btn btn-danger w-100">delete</button>
                                                 </form>
-                                                <% } %>
+                                            </div> 
+                                               <% } %>
                                         </div>
+                                        <!-- <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a> -->
+                                       
                                     </div>
                                 </div>
                                 <%}%>
                 </section>
-                <script>
+                <script defer>
                     console.log('be carefull, prettier adds space in EJS tag when files saved!!')
                     const mapToken = '<%- process.env.MAP_TOKEN %>';
                     const dessert = <%- JSON.stringify(data) %>;

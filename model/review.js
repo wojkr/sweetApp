@@ -16,6 +16,10 @@ const reviewSchema = new Schema({
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
+    },
+    dessert: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Dessert'
     }
 })
 

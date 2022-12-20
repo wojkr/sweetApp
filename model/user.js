@@ -13,6 +13,15 @@ const userSchema = new mongoose.Schema({
     require: true,
     minLength: 7
   },
+  reviews: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Review'
+  }],
+  desserts: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Dessert'
+  }],
+
 });
 
 userSchema.plugin(passportLocalMongoose);

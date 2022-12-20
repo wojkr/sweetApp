@@ -1,11 +1,10 @@
 if (process.env.NODE_ENV !== "production") {
   require('dotenv').config();
 }
-// console.log('key ', process.env.CLOUDINARY_KEY)
-// console.log('cloudname ', process.env.CLOUDINARY_CLOUD_NAME)
-// console.log('cloudinary secret ', process.env.CLOUDINARY_SECRET)
+
 const express = require("express");
 
+const adminsId = process.env.ADMIN_ID
 const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
@@ -28,8 +27,10 @@ const MongoStore = require('connect-mongo');
 
 const port = process.env.PORT || 3000;
 const secret = process.env.SECRET || "TheGemLettuceIsHidden";
+
 const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/sweetApp";
 // const dbUrl = "mongodb://localhost:27017/sweetApp";
+
 main().catch((err) => {
   console.log(
     "#####################################MONGO CONNECTION ERROR!##############################################"
@@ -129,6 +130,7 @@ app.use((req, res, next) => {
   res.locals.error = req.flash("error");
   res.locals.user = req.user || false;
   res.locals.defaultPic = 'https://res.cloudinary.com/b789b130931413a/image/upload/v1670111925/sweetApp/NO_PICTURE_gf5aio.jpg';
+  res.locals.adminsId = adminsId;
   next();
 });
 
@@ -169,7 +171,6 @@ app.use((err, req, res, next) => {
     .status(statusCode)
     .render("./error", { title: "ERROR", statusCode, message, err });
 });
-
 
 app.listen(port, () => {
   console.log(`Serving on port ${port}`);
