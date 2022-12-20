@@ -20,8 +20,8 @@
                     <h2><span class="text-muted">Added desserts: </span>
                         <%= data.desserts.length ? data.desserts.length : 'none' %>
                     </h2>
-                    <div id="map" class="map-cluster mb-3"></div>
                     <% if(data.desserts.length) {%>
+                        <div id="map" class="map-cluster mb-3"></div>
                         <% for(d of data.desserts) {%>
                             <div class="card p-4 mb-4">
                             <p class="card-title mb-1"><a href="/desserts/<%=d._id%>" class="lead">
