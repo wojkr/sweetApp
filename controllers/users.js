@@ -80,13 +80,6 @@ module.exports.logout = (req, res, next) => {
 };
 
 //-----------------------------------------------------------SHOW USER
-// module.exports.redirectUser = (req, res, next) => {
-//   if (req.user) {
-//     return res.redirect(`/users/user/${req.user._id}`)
-//   }
-//   res.cookie('returnTo', req.originalUrl)
-//   res.redirect("users/login")
-// }
 
 module.exports.showUser = async (req, res, next) => {
   if (!req.params.id) {
@@ -94,12 +87,10 @@ module.exports.showUser = async (req, res, next) => {
     return res.redirect("users/login")
   }
   const { id } = req.params;
-  if (!req.user._id.equals(id)) {
-    const data = await User.findById(id)
-    return res.render("users/showUser", { title: `${data.username}`, data })
-  }
-  res.render("users/showUser", { title: `${req.user.username}`, data: req.user })
+  const data = await User.findById(id).populate('desserts').populate('reviews')
+  res.render("users/showUser", { title: `${data.username}`, data })
 }
+
 module.exports.showAllUsers = async (req, res, next) => {
   const data = await User.find({})
   res.render('users/showAllUsers', { title: "All Users", data })

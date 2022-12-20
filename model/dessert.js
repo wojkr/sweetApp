@@ -54,7 +54,7 @@ const dessertSchema = new mongoose.Schema({
 }, options);
 
 dessertSchema.virtual('properties.popUpMarkup').get(function () {
-  return `${this.company} <br> <i>${this.name}</i>`
+  return `${this.company} <br> <a href="/desserts/${this._id}"><i>${this.name}</i></a>`
 })
 
 dessertSchema.post('findOneAndDelete', async (doc) => {
