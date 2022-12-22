@@ -1,5 +1,5 @@
 <% layout('./layouts/boilerplate') -%>
-<div class="row">
+<main id="user-info" class="row">
     <div class="col">
         <h1><span class="text-muted">User: </span> <%=data.username%>
         </h1>
@@ -11,9 +11,9 @@
         </form>
     </div>
     <% } %> 
-</div>
+</main>
     <hr>
-
+<section id="user-reviews">
     <h2><span class="text-muted">Added reviews:</span>
         <%= data.reviews.length ? data.reviews.length : 'none' %>
     </h2>
@@ -26,7 +26,8 @@
             <% } %>
                 <% } %>
                     <hr>
-
+                </section>
+                <section id="user-desserts">
                     <h2><span class="text-muted">Added desserts: </span>
                         <%= data.desserts.length ? data.desserts.length : 'none' %>
                     </h2>
@@ -48,6 +49,7 @@
                 </div>
                             <% } %>
                                 <% } %>
+                </section>
                                     <script>
                                         const mapToken = '<%- process.env.MAP_TOKEN %>';
                                         const desserts = { features: <%- JSON.stringify(data.desserts) %>};
