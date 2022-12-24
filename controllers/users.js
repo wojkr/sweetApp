@@ -120,16 +120,29 @@ module.exports.deleteUser = async (req, res) => {
   console.log('in delete controllers/user')
   console.log(`All content created by user ${userToDelete.username} to be deleted. DESSERTS: ${dessertsToDelete.length}, REVIEWS: ${reviewsToDelete.length}`)
 
-
   // delete user.reviews + user.desserts 
-  await User.updateMany(
-    { desserts: { $in: dessertsToDelete } },
-    { $pull: { desserts: { $in: dessertsToDelete } } }
-  )
-  await User.updateMany(
-    { reviews: { $in: reviewsToDelete } },
-    { $pull: { reviews: { $in: reviewsToDelete } } }
-  )
+  await User.bulkWrite([
+    {
+      updateMany: {
+        filter: {
+          desserts: { $in: dessertsToDelete }
+        },
+        update: {
+          $pull: { desserts: { $in: dessertsToDelete } }
+        }
+      }
+    },
+    {
+      updateMany: {
+        filter: {
+          reviews: { $in: reviewsToDelete }
+        },
+        update: {
+          $pull: { reviews: { $in: reviewsToDelete } }
+        }
+      }
+    }
+  ])
 
   //delete reviews
   await Review.deleteMany({ _id: { $in: reviewsToDelete } })
