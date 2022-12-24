@@ -101,50 +101,49 @@ module.exports.showAllUsers = async (req, res, next) => {
 
 //-----------------------------------------------------------DELETE USER
 module.exports.deleteUser = async (req, res) => {
+  const { id } = req.params;
+  const userToDelete = await User.findById(id);
+
   let reviewsToDelete = [];
   let dessertsToDelete = [];
-  if (req.user.reviews.length) {
-    reviewsToDelete = req.user.reviews.map(r => r._id)
+  if (userToDelete.reviews.length) {
+    reviewsToDelete = userToDelete.reviews.map(r => r._id)
   }
-  if (req.user.desserts.length) {
-    dessertsToDelete = req.user.desserts.map(d => d._id)
+  if (userToDelete.desserts.length) {
+    dessertsToDelete = userToDelete.desserts.map(d => d._id)
   }
 
   //other users reviews in our user desserts
-  const returnedReviews = await returnAllReviews(dessertsToDelete, req.user._id)
+  const returnedReviews = await returnAllReviews(dessertsToDelete, userToDelete._id)
   if (returnedReviews && returnedReviews.length) reviewsToDelete.push(...returnedReviews)
 
   console.log('in delete controllers/user')
-  console.log(`All content created by user ${req.user.username} to be deleted. DESSERTS: ${dessertsToDelete.length}, REVIEWS: ${reviewsToDelete.length}`)
+  console.log(`All content created by user ${userToDelete.username} to be deleted. DESSERTS: ${dessertsToDelete.length}, REVIEWS: ${reviewsToDelete.length}`)
+
 
   // delete user.reviews + user.desserts 
-  await User.updateMany({
-    $or: [
-      { reviews: { $in: reviewsToDelete } },
-      { desserts: { $in: dessertsToDelete } }
-    ]
-  },
-    {
-      $or: [
-        { $pull: { reviews: { $in: reviewsToDelete } } },
-        { $pull: { desserts: { $in: dessertsToDelete } } }
-      ]
-    })
+  await User.updateMany(
+    { desserts: { $in: dessertsToDelete } },
+    { $pull: { desserts: { $in: dessertsToDelete } } }
+  )
+  await User.updateMany(
+    { reviews: { $in: reviewsToDelete } },
+    { $pull: { reviews: { $in: reviewsToDelete } } }
+  )
 
   //delete reviews
   await Review.deleteMany({ _id: { $in: reviewsToDelete } })
   //delete dessert
   await Dessert.deleteMany({ _id: { $in: dessertsToDelete } })
 
-  const userId = req.user._id;
-  if (req.user) {
+  if (userToDelete.equals(req.user._id)) {
     req.logout(function (err) {
       if (err) {
         return next(err);
       }
     });
   }
-  await User.findByIdAndDelete(userId)
+  await User.findByIdAndDelete(userToDelete._id)
   req.flash('success', 'Succesfully removed account with all content. Bye!')
   res.redirect("/users/")
 }

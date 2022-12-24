@@ -6,7 +6,7 @@
     </div>
     <% if(data._id.equals(user._id)||adminsId.includes(user._id)){ %>
     <div class="col-auto">
-        <form action="/users/<%=user.id%>?_method=DELETE" method="POST">
+        <form action="/users/<%=data._id%>?_method=DELETE" method="POST">
         <button class="btn btn-danger" type="submit">DELETE</button>
         </form>
     </div>
