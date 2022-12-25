@@ -18,9 +18,9 @@ router
 
 router.route("/logout").get(routes.logout);
 
-router.route("/").get(routes.showAllUsers);
+router.route("/").get(isLoggedIn, routes.showAllUsers);
 router.route("/:id")
-  .get(routes.showUser)
+  .get(isLoggedIn, routes.showUser)
   .delete(isAuth, routes.deleteUser);
 
 module.exports = router;
