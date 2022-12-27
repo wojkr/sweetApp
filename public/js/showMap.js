@@ -1,7 +1,7 @@
 mapboxgl.accessToken = mapToken
 const map = new mapboxgl.Map({
     container: 'map', // container ID
-    style: 'mapbox://styles/mapbox/streets-v12', // style URL
+    style: 'mapbox://styles/wojciech73/clc5iwkgg008a14pg2krkdtx4', // style URL
     center: dessert.geometry.coordinates, // starting position [lng, lat]
     zoom: 9, // starting zoom
 });

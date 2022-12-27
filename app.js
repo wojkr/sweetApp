@@ -125,7 +125,7 @@ app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   res.locals.user = req.user || false;
-  res.locals.defaultPic = 'https://res.cloudinary.com/b789b130931413a/image/upload/v1670111925/sweetApp/NO_PICTURE_gf5aio.jpg';
+  res.locals.defaultPic = 'https://res.cloudinary.com/b789b130931413a/image/upload/v1672100552/sweetApp/zktpwpnd3xtjpvkooquy.png';
   res.locals.adminsId = adminsId;
   next();
 });
