@@ -71,6 +71,7 @@ module.exports.postLogin = (req, res, next) => {
 
 //----------------------------------------------------------LOGOUT
 module.exports.logout = (req, res, next) => {
+  const username = req.user.username;
   if (req.user) {
     req.logout(function (err) {
       if (err) {
@@ -78,6 +79,7 @@ module.exports.logout = (req, res, next) => {
       }
     });
   }
+  req.flash("success", `Bye bye, ${username}`);
   res.redirect("/desserts");
 };
 
