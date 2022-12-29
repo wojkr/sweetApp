@@ -19,18 +19,25 @@ module.exports.showNewDessertForm = (req, res) => {
 };
 module.exports.postNewDessert = async (req, res, next) => {
   const newDessert = new Dessert(req.body);
+
   const geoData = await geocoder.forwardGeocode({
     query: newDessert.country,
     limit: 1
   })
     .send()
-  newDessert.geometry = geoData.body.features[0].geometry;
-  newDessert.author = req.user._id;
-  newDessert.imgs = req.files.map(f => ({ url: f.path, filename: f.filename }))
-  await newDessert.save();
-  await User.findByIdAndUpdate(req.user._id, { $push: { desserts: newDessert } })
-  req.flash("success", "Successfully added a new dessert");
-  res.redirect(`/desserts/${newDessert._id}`);
+  if (geoData.body.features.length) {
+    newDessert.geometry = geoData.body.features[0].geometry;
+    newDessert.author = req.user._id;
+    newDessert.imgs = req.files.map(f => ({ url: f.path, filename: f.filename }))
+    await newDessert.save();
+    await User.findByIdAndUpdate(req.user._id, { $push: { desserts: newDessert } })
+    req.flash("success", "Successfully added a new dessert");
+    return res.redirect(`/desserts/${newDessert._id}`);
+  } else {
+    req.flash("error", "Couldn't find the Address, please try againg")
+    return res.redirect("desserts/new");
+
+  }
 };
 module.exports.showOneDessert = async (req, res, next) => {
   const { id } = req.params;
