@@ -19,7 +19,7 @@
                             <%}else{%>
                                     class= "carousel-item"
                                     <%}%>>
-                                        <img src="<%=img.url%>" class="img-fluid rounded-start" alt="desserts pictures"> 
+                                        <img id="<%=img.filename%>" src="<%=img.url%>" class="img-fluid rounded-start" alt="desserts pictures"> 
                                 </div>
                             <% }) %>
                         </div>
@@ -38,6 +38,7 @@
                             <img 
                             <%if(data.imgs.length){%>
                                 src="<%=data.imgs[0].url%>" 
+                                id="<%=data.imgs[0].filename%>" 
                                 <%}else{%>
                                     src="<%=defaultPic%>"
                                     <%}%>

@@ -2,6 +2,8 @@ const passport = require("passport");
 const Dessert = require("../model/dessert");
 const Review = require("../model/review")
 const User = require("../model/user");
+const cloudinary = require('cloudinary').v2;
+
 //----------------------------------------------------------REGISTER
 // };
 module.exports.showRegisterForm = (req, res, next) => {
@@ -104,7 +106,7 @@ module.exports.showAllUsers = async (req, res, next) => {
 //-----------------------------------------------------------DELETE USER
 module.exports.deleteUser = async (req, res) => {
   const { id } = req.params;
-  const userToDelete = await User.findById(id);
+  const userToDelete = await User.findById(id).populate('desserts');
 
   let reviewsToDelete = [];
   let dessertsToDelete = [];
@@ -121,6 +123,14 @@ module.exports.deleteUser = async (req, res) => {
 
   console.log('in delete controllers/user')
   console.log(`All content created by user ${userToDelete.username} to be deleted. DESSERTS: ${dessertsToDelete.length}, REVIEWS: ${reviewsToDelete.length}`)
+
+  //delete updated images
+  let imgsToDelete = [];
+  for (let dessert of userToDelete.desserts) {
+    dessert.imgs.map(i => imgsToDelete.push(i.filename))
+  }
+  if (imgsToDelete.length) cloudinary.api.delete_resources(imgsToDelete).then(result => console.log(result));
+  console.log(imgsToDelete)
 
   // delete user.reviews + user.desserts 
   await User.bulkWrite([

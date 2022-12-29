@@ -1,7 +1,7 @@
 const Dessert = require("../model/dessert");
 const User = require('../model/user');
 
-const { cloudinary } = require('../cloudinary/index')
+const cloudinary = require('cloudinary').v2
 const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const geocoder = mbxGeocoding({ accessToken: process.env.MAP_TOKEN });
 
@@ -82,7 +82,11 @@ module.exports.putOneDessert = async (req, res, next) => {
 module.exports.deleteOneDessert = async (req, res) => {
   const { id } = req.params;
   const dessert = await Dessert.findById(id);
-  await User.updateMany({ name: { $in: dessert.reviews.author } }, { $pull: { reviwes: { $in: dessert.reviews.author } } })
+  console.log(dessert.imgs.map(i => i.filename))
+  if (dessert.imgs.length) {
+    cloudinary.api.delete_resources(dessert.imgs.map(i => i.filename)).then(result => console.log(result));
+  }
+  await User.updateMany({ name: { $in: dessert.reviews.author } }, { $pull: { reviews: { $in: dessert.reviews.author } } })
   await Dessert.findByIdAndDelete(id);
   req.flash("success", "successfully deleted a dessert");
   res.redirect(`/desserts`);
