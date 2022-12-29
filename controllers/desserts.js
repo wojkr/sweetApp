@@ -19,7 +19,6 @@ module.exports.showNewDessertForm = (req, res) => {
 };
 module.exports.postNewDessert = async (req, res, next) => {
   const newDessert = new Dessert(req.body);
-
   const geoData = await geocoder.forwardGeocode({
     query: newDessert.country,
     limit: 1
@@ -34,9 +33,8 @@ module.exports.postNewDessert = async (req, res, next) => {
     req.flash("success", "Successfully added a new dessert");
     return res.redirect(`/desserts/${newDessert._id}`);
   } else {
-    req.flash("error", "Couldn't find the Address, please try againg")
+    req.flash("error", "Couldn't find the Address, please try again")
     return res.redirect("desserts/new");
-
   }
 };
 module.exports.showOneDessert = async (req, res, next) => {
@@ -73,18 +71,29 @@ module.exports.editOneDessertForm = async (req, res) => {
 };
 module.exports.putOneDessert = async (req, res, next) => {
   const { id } = req.params;
-  const dessert = await Dessert.findByIdAndUpdate(id, req.body, { runValidators: true });
-  const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
-  dessert.imgs.push(...imgs);
-  await dessert.save();
-  if (req.body.toDelete) {
-    for (let filename of req.body.toDelete) {
-      cloudinary.uploader.destroy(filename).then(result => console.log(result));
+  const geoData = await geocoder.forwardGeocode({
+    query: req.body.country,
+    limit: 1
+  })
+    .send()
+  if (geoData.body.features.length) {
+    req.body.geometry = geoData.body.features[0].geometry;
+    const dessert = await Dessert.findByIdAndUpdate(id, req.body, { runValidators: true });
+    const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
+    dessert.imgs.push(...imgs);
+    await dessert.save();
+    if (req.body.toDelete) {
+      for (let filename of req.body.toDelete) {
+        cloudinary.uploader.destroy(filename).then(result => console.log(result));
+      }
+      await dessert.updateOne({ $pull: { imgs: { filename: { $in: req.body.toDelete } } } })
     }
-    await dessert.updateOne({ $pull: { imgs: { filename: { $in: req.body.toDelete } } } })
+    req.flash("success", "successfully edited a dessert");
+    res.redirect(`/desserts/${id}`);
+  } else {
+    req.flash("error", "Couldn't find the Address, please try again")
+    return res.redirect("desserts/new");
   }
-  req.flash("success", "successfully edited a dessert");
-  res.redirect(`/desserts/${id}`);
 };
 module.exports.deleteOneDessert = async (req, res) => {
   const { id } = req.params;
