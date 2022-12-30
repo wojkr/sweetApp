@@ -2,6 +2,12 @@ const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
         if (entry.isIntersecting) {
             entry.target.classList.add('show')
+            entry.target.style.pointerEvents = 'none'
+            const timeout = Number(window.getComputedStyle(entry.target).getPropertyValue('transition-duration').replace('s', ''));
+            setTimeout(() => {
+                entry.target.style.pointerEvents = 'all'
+
+            }, timeout * 1000)
         } else {
             entry.target.classList.remove('show')
         }

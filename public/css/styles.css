@@ -28,14 +28,18 @@ a:hover {
   border: none;
   box-shadow: 0 0.5rem 1.5rem #ccb;
   filter: brightness(0.97);
+  transition: 0.3s;
 }
 
 #card-icon:hover {
-  transform: scale(1.02);
+  transform: translate(0,-1rem);
   filter: brightness(1.02);
-  transition: 0.3s;
   box-shadow: 0 0.5rem 2.5rem hsl(60, 14%, 57%);
 }
+#card-icon:hover h5 {
+ color: #212529 !important;
+}
+
 .card-title{
   font-weight: 100;
 }
@@ -47,10 +51,7 @@ a:hover {
 .hidden{
   visibility: hidden;
   opacity: 0;
-  transition: 500ms;
-}
-.hidden:nth-child(n){
-  transition-delay: calc(n*1s);
+  transition: 0.5s;
 }
 .hidden-left{
   transform: translate(-50%);
