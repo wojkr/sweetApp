@@ -44,6 +44,25 @@ a:hover {
   font-size: 10vh;
 }
 
+.hidden{
+  visibility: hidden;
+  opacity: 0;
+  transition: 500ms;
+}
+.hidden:nth-child(n){
+  transition-delay: calc(n*1s);
+}
+.hidden-left{
+  transform: translate(-50%);
+}
+.hidden-top{
+  transform: translate(0,-20%);
+}
+.show{
+  visibility: visible;
+  opacity: 1;
+  transform: translate(0,0);
+}
 hr{
   margin: 0.5rem 0;
 }
