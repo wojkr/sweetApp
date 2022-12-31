@@ -1,5 +1,6 @@
 const Dessert = require('../model/dessert');
 const Review = require('../model/review');
+const User = require('../model/user')
 
 module.exports.dessert = async (req, res, next) => {
     if (req.user) {
@@ -35,6 +36,28 @@ module.exports.review = async (req, res, next) => {
                 "You have no power here, weather boy... Youre not an Author! "
             );
             return res.redirect(`/desserts/${req.params.id}`);
+        }
+        return next();
+    }
+    res.cookie("returnTo", req.originalUrl)
+    req.flash('error', 'No access, log in and try again')
+    res.redirect('/users/login')
+};
+
+
+module.exports.user = async (req, res, next) => {
+    const { id } = req.params;
+    if (req.user) {
+        if (req.user._id.equals("6398ab6ccc79c7ec7ffc48ee")) {
+            console.log('admin pass granted')
+            return next()
+        }
+        if (!req.user._id.equals(id)) {
+            req.flash(
+                "error",
+                "You have no power here, weather boy... Youre not an Author! "
+            );
+            return res.redirect(`/users/${id}`);
         }
         return next();
     }

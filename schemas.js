@@ -27,6 +27,7 @@ module.exports.dessertSchema = Joi.object({
   dsc: Joi.string().required().escapeHTML(),
   country: Joi.string().required().escapeHTML(),
   company: Joi.string().required().escapeHTML(),
+  toDelete: Joi.string().escapeHTML(),
   // imgs: Joi.string(),
   // author:Joi.string().required(),
   price: Joi.number().required().min(0),

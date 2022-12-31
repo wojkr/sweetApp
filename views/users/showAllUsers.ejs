@@ -1,0 +1,30 @@
+<% layout('./layouts/boilerplate') -%>
+    <h1>users:
+    </h1>
+    <ul>
+        <% for(let d of data) {%>
+            <li class="allUsers-li">
+                <h3>
+                    <a href="/users/<%=d.id%>">
+                        <%=d.username%>
+                    </a>
+                </h3>
+                <p><span class="text-muted">Added: </span>
+                    <a href="/users/<%=d.id%>#user-desserts">
+                        <% if(d.desserts.length>1||d.desserts.length==0){ %>
+                            <%= d.desserts.length %> desserts,
+                                <% }else{ %>
+                                    1 dessert,
+                                    <% } %>
+                    </a>
+                    <a href="/users/<%=d.id%>#user-reviews">
+                        <% if(d.reviews.length>1||d.reviews.length==0){ %>
+                            <%= d.reviews.length %> reviews,
+                                <% }else{ %>
+                                    1 review.
+                                    <% } %>
+                    </a>
+                </p>
+            </li>
+            <% } %>
+    </ul>

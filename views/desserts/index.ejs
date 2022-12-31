@@ -15,7 +15,7 @@
       <div class="row justify-content-evenly text-center">
         <%for (let d of data){%>
 
-          <div class="card m-3 p-0" id="card-icon">
+          <div class="card m-3 p-0 hidden hidden-left" id="card-icon">
             <a href="/desserts/<%=d._id%>">
               <%if(d.imgs&&d.imgs.length){%>
                 <img src="<%=d.imgs[0].url%>" class="card-img-top" alt="..." >

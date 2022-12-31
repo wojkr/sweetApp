@@ -1,0 +1,60 @@
+<% layout('./layouts/boilerplate') -%>
+<main id="user-info" class="row">
+    <div class="col">
+        <h1><span class="text-muted">User: </span> <%=data.username%>
+        </h1>
+    </div>
+    <% if(data._id.equals(user._id)||adminsId.includes(user._id)){ %>
+    <div class="col-auto">
+        <form action="/users/<%=data._id%>?_method=DELETE" method="POST">
+        <button class="btn btn-danger" type="submit">DELETE</button>
+        </form>
+    </div>
+    <% } %> 
+</main>
+    <hr>
+<section id="user-reviews">
+    <h2><span class="text-muted">Added reviews:</span>
+        <%= data.reviews.length ? data.reviews.length : 'none' %>
+    </h2>
+    <% if(data.reviews.length) {%>
+        <% for(r of data.reviews) {%>
+            <p><a href="/desserts/<%=r.dessert%>#<%=r._id%>"><span class="text-muted">Rated: </span><%= r.rating %>/5
+                        <br>
+                        <span class="text-muted">Review: </span><%= r.text %>
+                </a></p>
+            <% } %>
+                <% } %>
+                    <hr>
+                </section>
+                <section id="user-desserts">
+                    <h2><span class="text-muted">Added desserts: </span>
+                        <%= data.desserts.length ? data.desserts.length : 'none' %>
+                    </h2>
+                    <% if(data.desserts.length) {%>
+                        <div id="map" class="map-cluster mb-3"></div>
+                        <% for(d of data.desserts) {%>
+                            <div class="card p-4 mb-4">
+                            <p class="card-title mb-1"><a href="/desserts/<%=d._id%>" class="lead">
+                                <%= d.name %>
+                            </a>
+                            <br>
+                            <span class="card-text text-muted"><%= d.dsc %></span>
+                        </p>
+                        <p class="card-text mb-1"><span class="text-muted">Country:</span> <%=d.country%>
+                        </p>
+                        <p class="card-text mb-1"><span class="text-muted">Rated:</span>
+                            <%=d.rate%>/5
+                    </p>
+                </div>
+                            <% } %>
+                                <% } %>
+                </section>
+                                    <script>
+                                        const mapToken = '<%- process.env.MAP_TOKEN %>';
+                                        const desserts = { features: <%- JSON.stringify(data.desserts) %>};
+                                   </script>
+                                    <script src="/js/clusterMap.js">
+                                    </script>
+
+

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const User = require('./user')
 
 const { Schema } = mongoose;
 
@@ -16,6 +17,16 @@ const reviewSchema = new Schema({
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
+    },
+    dessert: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Dessert'
+    }
+})
+
+reviewSchema.post("findOneAndDelete", async (doc) => {
+    if (doc) {
+        await User.findByIdAndUpdate(doc.author, { $pull: { reviews: doc._id } })
     }
 })
 

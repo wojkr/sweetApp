@@ -1,5 +1,7 @@
 const Dessert = require("../model/dessert");
-const { cloudinary } = require('../cloudinary/index')
+const User = require('../model/user');
+
+const cloudinary = require('cloudinary').v2
 const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const geocoder = mbxGeocoding({ accessToken: process.env.MAP_TOKEN });
 
@@ -22,12 +24,18 @@ module.exports.postNewDessert = async (req, res, next) => {
     limit: 1
   })
     .send()
-  newDessert.geometry = geoData.body.features[0].geometry;
-  newDessert.author = req.user._id;
-  newDessert.imgs = req.files.map(f => ({ url: f.path, filename: f.filename }))
-  await newDessert.save();
-  req.flash("success", "Successfully added a new dessert");
-  res.redirect(`/desserts/${newDessert._id}`);
+  if (geoData.body.features.length) {
+    newDessert.geometry = geoData.body.features[0].geometry;
+    newDessert.author = req.user._id;
+    newDessert.imgs = req.files.map(f => ({ url: f.path, filename: f.filename }))
+    await newDessert.save();
+    await User.findByIdAndUpdate(req.user._id, { $push: { desserts: newDessert } })
+    req.flash("success", "Successfully added a new dessert");
+    return res.redirect(`/desserts/${newDessert._id}`);
+  } else {
+    req.flash("error", "Couldn't find the Address, please try again")
+    return res.redirect("desserts/new");
+  }
 };
 module.exports.showOneDessert = async (req, res, next) => {
   const { id } = req.params;
@@ -36,7 +44,16 @@ module.exports.showOneDessert = async (req, res, next) => {
     req.flash("error", "Page not found");
     return res.redirect("/desserts");
   }
-  const data = await Dessert.findById(id).populate("reviews").populate("author");
+  const data = await Dessert.findById(id)
+    .populate("author")
+    .populate("reviews")
+    .populate({
+      path: "reviews",
+      populate: {
+        path: "author",
+        model: "User"
+      }
+    });
   if (!data) {
     req.flash("error", "Dessert not found");
     return res.redirect("/desserts");
@@ -54,21 +71,38 @@ module.exports.editOneDessertForm = async (req, res) => {
 };
 module.exports.putOneDessert = async (req, res, next) => {
   const { id } = req.params;
-  const dessert = await Dessert.findByIdAndUpdate(id, req.body, { runValidators: true });
-  const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
-  dessert.imgs.push(...imgs);
-  await dessert.save();
-  if (req.body.toDelete) {
-    for (let filename of req.body.toDelete) {
-      cloudinary.uploader.destroy(filename).then(result => console.log(result));
+  const geoData = await geocoder.forwardGeocode({
+    query: req.body.country,
+    limit: 1
+  })
+    .send()
+  if (geoData.body.features.length) {
+    req.body.geometry = geoData.body.features[0].geometry;
+    const dessert = await Dessert.findByIdAndUpdate(id, req.body, { runValidators: true });
+    const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
+    dessert.imgs.push(...imgs);
+    await dessert.save();
+    if (req.body.toDelete) {
+      for (let filename of req.body.toDelete) {
+        cloudinary.uploader.destroy(filename).then(result => console.log(result));
+      }
+      await dessert.updateOne({ $pull: { imgs: { filename: { $in: req.body.toDelete } } } })
     }
-    await dessert.updateOne({ $pull: { imgs: { filename: { $in: req.body.toDelete } } } })
+    req.flash("success", "successfully edited a dessert");
+    res.redirect(`/desserts/${id}`);
+  } else {
+    req.flash("error", "Couldn't find the Address, please try again")
+    return res.redirect("desserts/new");
   }
-  req.flash("success", "successfully edited a dessert");
-  res.redirect(`/desserts/${id}`);
 };
 module.exports.deleteOneDessert = async (req, res) => {
   const { id } = req.params;
+  const dessert = await Dessert.findById(id);
+  console.log(dessert.imgs.map(i => i.filename))
+  if (dessert.imgs.length) {
+    cloudinary.api.delete_resources(dessert.imgs.map(i => i.filename)).then(result => console.log(result));
+  }
+  await User.updateMany({ name: { $in: dessert.reviews.author } }, { $pull: { reviews: { $in: dessert.reviews.author } } })
   await Dessert.findByIdAndDelete(id);
   req.flash("success", "successfully deleted a dessert");
   res.redirect(`/desserts`);
