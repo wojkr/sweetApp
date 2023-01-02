@@ -1,6 +1,4 @@
 # sweetApp
-
-# sweetApp
 by [wojKr](https://github.com/wojkr)
 
 [Contact Me](mailto:test.wojkr@gmail.com?subject=[GitHub]%20React%20Crud%20Website)
