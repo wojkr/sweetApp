@@ -36,7 +36,7 @@
                     </div>
                         <%}else{%>
                             <img 
-                            <%if(data.imgs.length){%>
+                            <%if(data.imgs.length&&data.imgs[0].url!==""){%>
                                 src="<%=data.imgs[0].url%>" 
                                 id="<%=data.imgs[0].filename%>" 
                                 <%}else{%>
@@ -165,7 +165,7 @@
                                 </div>
                                 <%}%>
                 </section>
-                <script defer>
+                <script >
                     console.log('be carefull, prettier adds space in EJS tag when files saved!!')
                     const mapToken = '<%- process.env.MAP_TOKEN %>';
                     const dessert = <%- JSON.stringify(data) %>;
