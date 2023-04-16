@@ -1,13 +1,12 @@
 <% layout('./layouts/boilerplate') -%>
     <main class="d-flex flex-column flex-strech align-items-center justify-content-center h-100 hidden hidden-top">
         <a href="/desserts">
-            <h1 id="header-biggest" class="fw-light">Hello<% if(user){%>
+            <h1 id="header-biggest" class="fw-light display-1">Hello<% if(user){%>
                     <%= user.username %>!
                         <%} %>
             </h1>
-            <h2 class="fs-5 ">
-                Welcome in our spacious and sweet place. Enjoy browsing best
-                of puddings that we could find, and if you fancy try it and leave your opinion!
+            <h2 id="header-big" class="display-6">
+                Indulge in the sweetness of pudding perfection with SweetApp - browse, try, and rate the best desserts today!
         </a>
         </h2>
         <a class="mt-3 btn btn-lg btn-outline-dark fw-light" href="/desserts" role="button">Check it out!</a>

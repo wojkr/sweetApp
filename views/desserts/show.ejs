@@ -170,7 +170,8 @@
                     const mapToken = '<%- process.env.MAP_TOKEN %>';
                     const dessert = <%- JSON.stringify(data) %>;
                     const defaultImg = '<%=defaultPic%>';
-                    const imgClassName = 'img-fluid';
+                    
                 </script>
-                <script src="/js/showMap.js"></script>
+                <script>const imgClassName = 'img-fluid';</script>
+                <script  src="/js/showMap.js"></script>
                 <script src="/js/imgOnError.js"></script>

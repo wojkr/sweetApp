@@ -1,15 +1,27 @@
-<nav class="navbar navbar-expand-md navbar-light shadow-lg bg-gradient sticky-top">
+<nav
+  class="navbar navbar-expand-md navbar-light shadow-lg bg-gradient sticky-top"
+>
   <div class="container">
     <!-- <a class="navbar-brand fs-3" href="/"><b><i>sweet</i><span class="text-danger">App</span></b></a> -->
-    <a class="navbar-brand fs-3" href="/"><img id="nav-logo"
+    <a class="navbar-brand fs-3" href="/"
+      ><img
+        id="nav-logo"
         src="https://res.cloudinary.com/b789b130931413a/image/upload/v1671137322/sweetApp/LogoMakr-5lbVVf_dr20ds.png"
-        alt=""></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        alt=""
+    /></a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav  flex-grow-1 ">
+      <ul class="navbar-nav flex-grow-1">
         <li class="nav-item">
           <a class="nav-link" aria-current="page" href="/">Home</a>
         </li>
@@ -22,31 +34,37 @@
         <li class="nav-item">
           <a class="nav-link" href="/desserts/new">Add a new dessert</a>
         </li>
+        <div class="navbar-nav nav-auth">
         <% if(!user){ %>
-          <li class="nav-item">
-            <a class="nav-link" href="/users/register">Register</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/users/login">Log in</a>
-          </li>
-          <% }else{ %>
-            <li class="nav-item">
-              <a class="nav-link" href="/users/logout">Log out</a>
-            </li>
-            <% } %>
+        <li class="nav-item">
+          <a class="nav-link" id="nav-register" href="/users/register"
+            >Register</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/users/login">Log in</a>
+        </li>
+        <% }else{ %>
+        <li class="nav-item">
+          <a class="nav-link" href="/users/logout">Log out</a>
+        </li>
+        <% } %>
+      </div>
       </ul>
       <% if(user){ %>
-        <ul class="navbar-nav  ">
-          <div class="navbar-user nav-item">
-            <a class="nav-link" href="/users/<%=user.id%>">
-              <img id="nav-pic-user"
-                src="https://res.cloudinary.com/b789b130931413a/image/upload/c_scale,h_50/v1671204814/sweetApp/LogoMakr-4fj5b9_qlmg11.png"
-                alt="">
-              <%=user.username %>
-            </a>
-          </div>
-        </ul>
-        <% } %>
+      <ul class="navbar-nav">
+        <div class="navbar-user nav-item">
+          <a class="nav-link" href="/users/<%=user.id%>">
+            <img
+              id="nav-pic-user"
+              src="https://res.cloudinary.com/b789b130931413a/image/upload/c_scale,h_50/v1671204814/sweetApp/LogoMakr-4fj5b9_qlmg11.png"
+              alt=""
+            />
+            <%=user.username %>
+          </a>
+        </div>
+      </ul>
+      <% } %>
     </div>
   </div>
 </nav>
