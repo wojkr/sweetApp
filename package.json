@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "preinstall": "node -e \"if(!(process.env.npm_config_user_agent||'').startsWith('npm/')){console.error('ERROR: this project must be installed with npm (use npm ci). Yarn/pnpm are not supported.');process.exit(1)}\""
   },
   "repository": {
     "type": "git",
@@ -40,5 +41,8 @@
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^7.1.2",
     "sanitize-html": "^2.7.3"
+  },
+  "engines": {
+    "node": ">=24 <25"
   }
 }
