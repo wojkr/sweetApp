@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== "production") {
 const express = require("express");
 
 const adminsId = process.env.ADMIN_ID
+const defaultPic = 'https://res.cloudinary.com/b789b130931413a/image/upload/v1672100552/sweetApp/zktpwpnd3xtjpvkooquy.png';
 const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
@@ -28,11 +29,17 @@ const port = process.env.PORT || 3000;
 const secret = process.env.SECRET || "TheGemLettuceIsHidden";
 const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/sweetApp";
 // const dbUrl = "mongodb://localhost:27017/sweetApp";
+// Node >= 15 exits on unhandled rejections (e.g. connect-mongo failing to reach the DB).
+// Keep the pre-15 behaviour: log and stay up, so the app can still serve error pages.
+process.on("unhandledRejection", (reason) => {
+  console.error("-------UNHANDLED REJECTION-------", reason);
+});
+
 main().catch((err) => {
-  console.log(
+  console.error(
     "#####################################MONGO CONNECTION ERROR!##############################################"
   );
-  console.log(err);
+  console.error(err);
 });
 
 async function main() {
@@ -84,18 +91,26 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(methodOverride("_method"));
 
-const store = MongoStore.create({
-  mongoUrl: dbUrl,
-  secret,
-  touchAfter: 24 * 3600 // time period in seconds
-})
+let store;
+try {
+  store = MongoStore.create({
+    mongoUrl: dbUrl,
+    secret,
+    touchAfter: 24 * 3600 // time period in seconds
+  })
+} catch (e) {
+  console.error("-------SESSION STORE CREATION FAILED-------", e)
+  console.error("Sessions are in-memory (express-session MemoryStore) because the Mongo session store could not be created.")
+}
 
-store.on("error", function (e) {
-  console.log("-------SESSION STORE ERROR-------", e)
-})
+if (store) {
+  store.on("error", function (e) {
+    console.log("-------SESSION STORE ERROR-------", e)
+  })
+}
 
 const sessionConfig = {
-  store,
+  store, // undefined => express-session falls back to its default MemoryStore
   name: 'sweetsession',
   secret,
   resave: false,
@@ -126,10 +141,17 @@ app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   res.locals.user = req.user || false;
-  res.locals.defaultPic = 'https://res.cloudinary.com/b789b130931413a/image/upload/v1672100552/sweetApp/zktpwpnd3xtjpvkooquy.png';
+  res.locals.defaultPic = defaultPic;
   res.locals.adminsId = adminsId;
   next();
 });
+
+// mongoose 6 buffers queries forever after a failed initial connect, so DB-backed requests would hang.
+const requireDb = (req, res, next) => {
+  if (mongoose.connection.readyState !== 1) return next(new ExpressError("Database unavailable", 503));
+  next();
+};
+app.use(["/desserts", "/users"], requireDb);
 
 const dessertsRoutes = require("./routes/desserts");
 app.use("/desserts", dessertsRoutes);
@@ -161,12 +183,44 @@ const handleValidationErr = (err) => {
 };
 
 app.use((err, req, res, next) => {
-  const { statusCode = 500, message = "something went wrong" } = err;
-  // console.log(message);
+  console.error(`ERROR HANDLER: ${req.method} ${req.originalUrl}`, err && err.stack ? err.stack : err);
+  if (res.headersSent) return next(err);
 
-  res
-    .status(statusCode)
-    .render("./error", { title: "ERROR", statusCode, message, err });
+  const isProd = process.env.NODE_ENV === "production";
+  const rawStatus = err.statusCode || err.status;
+  const statusCode = Number.isInteger(rawStatus) && rawStatus >= 400 && rawStatus <= 599 ? rawStatus : 500;
+
+  // The session/passport/locals middleware may not have run, so make sure every local the views use exists.
+  const defaults = {
+    path: req.originalUrl || "/",
+    user: req.user || false,
+    success: [],
+    error: [],
+    defaultPic,
+    adminsId: adminsId || "",
+    title: "ERROR",
+  };
+  for (const key of Object.keys(defaults)) {
+    if (res.locals[key] === undefined) res.locals[key] = defaults[key];
+  }
+
+  // Raw 5xx messages (e.g. DB errors) can leak internals in production.
+  const message = statusCode >= 500 && isProd
+    ? "Something went wrong. Please try again later."
+    : err.message || "Something went wrong.";
+
+  res.status(statusCode).render("./error", {
+    statusCode,
+    message,
+    errName: err.name || "Error",
+    stack: isProd ? null : err.stack || null,
+  }, (renderErr, html) => {
+    if (renderErr) {
+      console.error("ERROR PAGE RENDER FAILED:", renderErr);
+      return res.status(statusCode).type("text/plain").send(`${statusCode} ERROR`);
+    }
+    res.send(html);
+  });
 });
 
 app.listen(port, () => {

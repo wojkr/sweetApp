@@ -1,10 +1,10 @@
-<%if(success&&success.length){%>
+<%if(typeof success!=="undefined"&&success&&success.length){%>
     <div class="alert alert-success" role="alert">
         <%=success%>
     </div>
     <%}%>
 
-        <%if(error&&error.length){%>
+        <%if(typeof error!=="undefined"&&error&&error.length){%>
             <div class="alert alert-danger" role="alert">
                 <%=error%>
             </div>

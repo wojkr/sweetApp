@@ -22,7 +22,7 @@
         <li class="nav-item">
           <a class="nav-link" href="/desserts/new">Add a new dessert</a>
         </li>
-        <% if(!user){ %>
+        <% if(!(typeof user!=="undefined"&&user)){ %>
           <li class="nav-item">
             <a class="nav-link" href="/users/register">Register</a>
           </li>
@@ -35,7 +35,7 @@
             </li>
             <% } %>
       </ul>
-      <% if(user){ %>
+      <% if(typeof user!=="undefined"&&user){ %>
         <ul class="navbar-nav  ">
           <div class="navbar-user nav-item">
             <a class="nav-link" href="/users/<%=user.id%>">

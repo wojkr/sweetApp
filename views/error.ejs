@@ -1,16 +1,16 @@
 <% layout('./layouts/boilerplate') -%>
   <div class="alert alert-danger col-md-6 offset-md-3" role="alert">
     <h4 class="alert-heading text-center">
-      <%=statusCode%> ERROR: <%=err.name%>
+      <%=typeof statusCode!=="undefined"&&statusCode?statusCode:500%> ERROR: <%=typeof errName!=="undefined"&&errName?errName:"Error"%>
     </h4>
     <p>
-      <%=message%>
+      <%=typeof message!=="undefined"&&message?message:"Something went wrong."%>
     </p>
-    <a href="<%=path%>" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Go back</a>
+    <a href="<%=typeof path!=="undefined"&&path?path:'/'%>" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Go back</a>
     <hr />
-    <%if (process.env.NODE_ENV !=="production" ) {%>
+    <%if (typeof stack!=="undefined"&&stack) {%>
       <p class="mb-0">
-        <%=err.stack%>
+        <%=stack%>
       </p>
       <%}%>
   </div>
