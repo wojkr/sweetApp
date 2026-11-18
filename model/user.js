@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const passportLocalMongoose = require("passport-local-mongoose");
+const passportLocalMongoose = require("passport-local-mongoose").default; // v9 exports the plugin as .default
 
 const userSchema = new mongoose.Schema({
   username: {
