@@ -23,7 +23,8 @@ const ExpressError = require("./utils/ExpressError");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 
-const MongoStore = require('connect-mongo');
+// connect-mongo 6 ships dual ESM/CJS: require() returns { MongoStore, default, ... }, the class is on .default
+const MongoStore = require('connect-mongo').default;
 
 const port = process.env.PORT || 3000;
 const secret = process.env.SECRET || "TheGemLettuceIsHidden";
@@ -41,6 +42,10 @@ main().catch((err) => {
   );
   console.error(err);
 });
+
+// Mongoose 6 defaulted to strictQuery: true (filter paths not in the schema are stripped); 7+ defaults to false.
+// Keep the 6.x query-filter behaviour (migrating_to_7.md, "strictQuery").
+mongoose.set("strictQuery", true);
 
 async function main() {
   await mongoose.connect(dbUrl);
@@ -161,7 +166,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// mongoose 6 buffers queries forever after a failed initial connect, so DB-backed requests would hang.
+// After a failed initial connect mongoose 9 buffers queries until bufferTimeoutMS (10s default) and then rejects,
+// so DB-backed requests would hang ~10s before erroring. Answer 503 immediately instead.
 const requireDb = (req, res, next) => {
   if (mongoose.connection.readyState !== 1) return next(new ExpressError("Database unavailable", 503));
   next();
