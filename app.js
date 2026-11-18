@@ -53,7 +53,22 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(mongoSanitize());
+// Express 5: req.query is a getter and cannot be reassigned, which express-mongo-sanitize's middleware does.
+// Same effect (drops keys starting with "$" or containing "."), but redefine req.query on the instance.
+app.use((req, res, next) => {
+  if (req.body) mongoSanitize.sanitize(req.body);
+  if (req.params) mongoSanitize.sanitize(req.params);
+  if (req.headers) mongoSanitize.sanitize(req.headers);
+  if (req.query) {
+    Object.defineProperty(req, "query", {
+      value: mongoSanitize.sanitize({ ...req.query }),
+      writable: true,
+      configurable: true,
+      enumerable: true,
+    });
+  }
+  next();
+});
 
 const { scriptSrcUrls, styleSrcUrls, connectSrcUrls, fontSrcUrls } = require('./utils/helmetConfigCSP')
 
@@ -167,7 +182,7 @@ app.get("/", (req, res) => {
 });
 
 const errorRoute = require("./routes/error");
-app.use("*", errorRoute);
+app.use(errorRoute);
 
 //------------------------------------------------------------------------------------------SEEDS IMPLEMENTATION 
 //to add seeds, uncomment code below and move it before routes for express to hit it, or just simply uncomment and hit the 404 route ;
